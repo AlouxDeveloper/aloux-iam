@@ -1,0 +1,8 @@
+Requiere las siguientes variables de entorno (.env)
+
+AUTH_SECRET
+AWS_SECRET_ACCESS_KEY
+AWS_ACCESS_KEY_ID
+AWS_REGION
+AWS_BUCKET
+AWS_EMAIL_SENDER
