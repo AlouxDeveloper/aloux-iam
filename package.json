@@ -24,7 +24,8 @@
         "jsonwebtoken": "^9.0.0",
         "method-override": "^3.0.0",
         "mongodb": "^3.5.11",
-        "mongoose": "^5.13.3"
+        "mongoose": "^5.13.3",
+        "aws-sdk": "^2.1318.0"
     },
     "devDependencies": {
     }
