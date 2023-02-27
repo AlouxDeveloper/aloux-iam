@@ -1,6 +1,6 @@
 {
     "name": "aloux-node-iam",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "description": "Aloux Identity and Access Management for APIs ",
     "main": "index.js",
     "scripts": {
