@@ -47,14 +47,21 @@ Requiere las siguientes variables de entorno (.env)
 
 ## Endpoints disponibles
 
+Endpoints user self (no auth)
+
+| Method    |   Endpoint                |   Description |
+| --------- | --------------------------|---------------|
+| POST      |   user/email              |   Validar correo |
+| POST      |   user/login              |   Iniciar sesión |
+| POST      |   user/forgot/password    |	Enviar código a correo |
+| POST      |   user/validate/code      |   Verificar código |
+| POST      |   user/reset/password     |   Reestablecer contraseña |
+
+
 Endpoints user self
 
 | Method    |   Endpoint                |   Description |
 | --------- | --------------------------|---------------|
-| POST      |   user/login              |   Iniciar sesión |
-| POST      |   user/reset/password     |   Reestablecer contraseña |
-| POST      |   user/validate/code      |   Verificar código |
-| POST      |   user/forgot/password    |	Enviar código a correo |
 | GET       |	user/me                 |	Obtener información de usuario autenticado |
 | PUT       |	user/profile            |	Actualizar perfil |
 | PUT       |	user/profile/pictura    |	Actualizar solo la foto de perfil |
@@ -64,8 +71,8 @@ Endpoints user self
 
 Endpoints user
 
-| Metho     |   Endpoint                    |   Description |
-| --------- | ------------------------------|---------------|
+| Method     |   Endpoint                    |   Description |
+| --------- | ------------------------------|----------------|
 | POST      |   iam/user                    |	Crear usuario |
 | GET       |	iam/user                    |	Obtener todos los usuario |
 | GET       |	iam/user/:USER_ID           |	Obtener detalle de usuario |
@@ -77,8 +84,8 @@ Endpoints user
 
 Endpoints funtions
 
-| Metho     |   Endpoint                            |   Description |
-| --------- | --------------------------------------|---------------|
+| Method     |   Endpoint                            |   Description |
+| --------- | --------------------------------------|----------------|
 | POST      |   iam/functions                       |   Crear función |
 | PUT       |	iam/functions/:FUNCTION_ID          |	Actualizar función |
 | PUT       |	iam/functions/active/:FUNCTION_ID   |	Activar o desactivar función |
