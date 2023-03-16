@@ -12,24 +12,22 @@ $ npm install aloux-node-iam --save
 ## Usage
 En archivo `init.js`
 
-Importación
 ```js
+// Importación
 const { iam } = require('aloux-node-iam')
-```
 
-Uso
-```js
+// uso
 app.use(iam)
 ```
 
+
 En archivo `router.js`
 
-Importación
 ```js
+// Importación
 const { auth } = require('aloux-node-iam')
-```
-Uso (ejemplo)
-```js
+
+// uso (ejemplo)
 router.post('/customer', auth, customer.create)
 ```
 
