@@ -14,7 +14,6 @@ Endpoints user self
 
 | Method        | Endpoint              | Description |
 | ------------- | ----------------------|-------------|
-
 | POST | user/login | Iniciar sesión |
 | POST | user/reset/password | Reestablecer contraseña |
 | POST | user/validate/code | Verificar código |
@@ -28,15 +27,15 @@ Endpoints user self
 
 Endpoints user
 
-| Method        | Endpoint              | Description |
-| ------------- | ----------------------|-------------|
-| POST | iam/user |	Crear usuario |
-| GET |	iam/user |	Obtener todos los usuario |
-| GET |	iam/user/:USER_ID |	Obtener detalle de usuario |
-| PUT |	iam/user/:USER_ID |	Actualizar usuario |
-| PUT |	iam/user/active/:USER_ID |	Activar o desactivar usuario |
-| PUT |	iam/user/password/:USER_ID |	Actualizar la constraseña de un usuario |
-| DELETE |	iam/user/:USER_ID |	Eliminar usuario |
+| Method        | Endpoint                  | Description |
+| ------------- | --------------------------|-------------|
+| POST      |   iam/user                    |	Crear usuario |
+| GET       |	iam/user                    |	Obtener todos los usuario |
+| GET       |	iam/user/:USER_ID           |	Obtener detalle de usuario |
+| PUT       |	iam/user/:USER_ID           |	Actualizar usuario |
+| PUT       |	iam/user/active/:USER_ID    |	Activar o desactivar usuario |
+| PUT       |	iam/user/password/:USER_ID  |	Actualizar la constraseña de un usuario |
+| DELETE    |	iam/user/:USER_ID           |	Eliminar usuario |
 
 
 Endpoints user
