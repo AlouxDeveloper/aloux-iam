@@ -1,3 +1,40 @@
+# Aloux Identity and Access Management for APIs
+
+Uso de esta librearía para administración de menus, privilegios, funciones y usuarios
+
+## Installation
+
+```bash
+$ npm install aloux-node-iam --save
+```
+
+
+## Usage
+En archivo `init.js`
+
+Importación
+```js
+const { iam } = require('aloux-node-iam')
+```
+
+Uso
+```js
+app.use(iam)
+```
+
+En archivo `router.js`
+
+Importación
+```js
+const { auth } = require('aloux-node-iam')
+```
+Uso (ejemplo)
+```js
+router.post('/customer', auth, customer.create)
+```
+
+## Variables de entorno
+
 Requiere las siguientes variables de entorno (.env)
 
 | Variable              |   Description |
@@ -10,10 +47,12 @@ Requiere las siguientes variables de entorno (.env)
 | AWS_EMAIL_SENDER      |   Required, para mandar el correo de recuperación de contraseña |
 
 
+## Endpoints disponibles
+
 Endpoints user self
 
-| Method    |   Endpoint                | Description |
-| --------- | --------------------------|-------------|
+| Method    |   Endpoint                |   Description |
+| --------- | --------------------------|---------------|
 | POST      |   user/login              |   Iniciar sesión |
 | POST      |   user/reset/password     |   Reestablecer contraseña |
 | POST      |   user/validate/code      |   Verificar código |
@@ -27,8 +66,8 @@ Endpoints user self
 
 Endpoints user
 
-| Metho     |   Endpoint                    | Description |
-| --------- | ------------------------------|-------------|
+| Metho     |   Endpoint                    |   Description |
+| --------- | ------------------------------|---------------|
 | POST      |   iam/user                    |	Crear usuario |
 | GET       |	iam/user                    |	Obtener todos los usuario |
 | GET       |	iam/user/:USER_ID           |	Obtener detalle de usuario |
@@ -38,7 +77,7 @@ Endpoints user
 | DELETE    |	iam/user/:USER_ID           |	Eliminar usuario |
 
 
-Endpoints user
+Endpoints funtions
 
 | Metho     |   Endpoint                            |   Description |
 | --------- | --------------------------------------|---------------|
@@ -50,11 +89,11 @@ Endpoints user
 | DELETE    |	iam/functions/:FUNCTION_ID          |	Eliminar función |
 
 
-Endpoints user
+Endpoints permission
 
 | Method    |   Endpoint                                |   Description |
 | --------- | ------------------------------------------|---------------|
-| POST      |	iam/permission	Crear permiso           |
+| POST      |	iam/permission                          |   Crear permiso
 | PUT       |	iam/permission/:PERMISSION_ID           |	Actualizar permiso |
 | PUT       |	iam/permission/active/:PERMISSION_ID    |	Activar o desactivar permiso |
 | GET       |	iam/permission                          |   Obtener todas los permisos |
@@ -62,7 +101,7 @@ Endpoints user
 | DELETE    |	iam/permission/:PERMISSION_ID           |	Eliminar permiso |
 
 
-Endpoints menú
+Endpoints menu
 
 | Method    |   Endpoint                |   Description |
 | --------- | --------------------------|---------------|
