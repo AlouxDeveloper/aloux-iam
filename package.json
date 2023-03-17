@@ -1,6 +1,6 @@
 {
     "name": "aloux-node-iam",
-    "version": "0.0.2",
+    "version": "0.0.6",
     "description": "Aloux Identity and Access Management for APIs ",
     "main": "index.js",
     "scripts": {
@@ -25,7 +25,8 @@
         "method-override": "^3.0.0",
         "mongodb": "^3.5.11",
         "mongoose": "^5.13.3",
-        "aws-sdk": "^2.1318.0"
+        "@aws-sdk/client-s3": "^3.293.0",
+        "@aws-sdk/client-ses": "^3.293.0"
     },
     "devDependencies": {
     }
