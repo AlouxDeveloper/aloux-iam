@@ -1,0 +1,133 @@
+openapi: 3.0.0
+info:
+  title: aloux-sdk-iam
+  description: APIs para Aloux SDK IAM
+  version: 1.0.0
+  contact:
+    name: API Aloux
+    url: https://aloux.mx
+    email: developer@aloux.mx
+servers:
+  - url: http://localhost
+    description: DEV
+components:
+  securitySchemes:
+    bearerAuth:            # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+paths:
+  /iam/user/email:
+    post:
+      summary: Validar email
+      tags:
+        - users - self
+      description: Validar email
+      requestBody:
+        content:
+          'application/json':
+            schema:
+              properties:
+                  email: 
+                    description: email
+                    type: string
+              required:
+                - email
+      responses:
+        '200':    # status code
+          description: Ok
+  /iam/user/login:
+    post:
+      summary: Iniciar sesión
+      tags:
+        - users - self
+      description: Iniciar sesión
+      requestBody:
+        content:
+          'application/json':
+            schema:
+              properties:
+                  email: 
+                    description: email
+                    type: string
+                    example: developer@aloux.mx
+                  pwd:
+                    description: password
+                    type: string
+                    example: Cc12345
+              required:
+                - email
+                - pwd
+      responses:
+        '200':    # status code
+          description: Return token
+          content:
+            application/json:
+              schema: 
+                type: object
+                items: 
+                  type: string
+  /iam/user/me:
+    get:
+      summary: Obtiene mi info.
+      tags:
+        - users - self
+      description: Obtiene mi inforación así como privilegios y elementos de menú asinados.
+      security:
+        - bearerAuth: []
+      responses:
+        '200':    # status code
+          description: A JSON object of a client
+          content:
+            application/json:
+              schema: 
+                type: object
+                items: 
+                  type: string
+  /iam/user/logout:
+    post:
+      summary: Cerrar sesión 
+      tags:
+        - users - self
+      description: Cierra la sesión de un usuario
+      security:
+        - bearerAuth: []
+      responses:
+        '200':    # status code
+          description: Ok
+  /iam/user:
+    post:
+      summary: Crear un usuario
+      tags:
+        - users
+      description: Crear un nuevo usuario
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          'application/json':
+            schema:
+                  properties:
+                      email: 
+                        type: string
+                        example: Martín
+                      lastName: 
+                        type: string
+                        example: Martínez
+                      phone:
+                        type: string
+                        example: +525567087001
+                      email: 
+                        description: email
+                        type: string
+                        example: developer@aloux.mx
+                      pwd:
+                        description: password
+                        type: string
+                        example: Cc12345
+                  required:
+                    - email
+                    - pwd
+      responses:
+        '200':    # status code
+          description: Ok

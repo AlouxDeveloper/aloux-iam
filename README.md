@@ -1,11 +1,11 @@
-# Aloux Identity and Access Management for APIs
+# Aloux SDK Identity and Access Management
 
 Uso de esta librearía para administración de menus, privilegios, funciones y usuarios
 
 ## Installation
 
 ```bash
-$ npm install aloux-node-iam --save
+$ npm install aloux-sdk-iam --save
 ```
 
 
@@ -14,10 +14,21 @@ En archivo `init.js`
 
 ```js
 // Importación
-const { iam } = require('aloux-node-iam')
+const { IAMRouter, IAMSwagger } = require('aloux-sdk-iam')
 
 // uso
 app.use(iam)
+
+// uso swagger
+app.use(
+    "/docs-iam",
+    swaggerUI.serveFiles(IAMswagger, {}), 
+    swaggerUI.setup(IAMswagger)
+    )
+
+// URL Swagger
+// [BASE_URL]/docs-iam/#/default/
+
 ```
 
 
@@ -25,10 +36,10 @@ En archivo `router.js`
 
 ```js
 // Importación
-const { auth } = require('aloux-node-iam')
+const { IAMAuth } = require('aloux-sdk-iam')
 
 // uso (ejemplo)
-router.post('/customer', auth, customer.create)
+router.post('/customer', IAMAuth, customer.create)
 ```
 
 ## Variables de entorno
@@ -43,6 +54,7 @@ Requiere las siguientes variables de entorno (.env)
 | AWS_REGION            |   Required, para acceso a S3 y SES AWS. |
 | AWS_BUCKET            |   Required, para guardar la foto de perfil en AWS. |
 | AWS_EMAIL_SENDER      |   Required, para mandar el correo de recuperación de contraseña |
+| BASE_URL              |   Optional, para swagger |
 
 
 ## Endpoints disponibles
@@ -51,22 +63,22 @@ Endpoints user self (no auth)
 
 | Method    |   Endpoint                |   Description |
 | --------- | --------------------------|---------------|
-| POST      |   user/email              |   Validar correo |
-| POST      |   user/login              |   Iniciar sesión |
-| POST      |   user/forgot/password    |	Enviar código a correo |
-| POST      |   user/validate/code      |   Verificar código |
-| POST      |   user/reset/password     |   Reestablecer contraseña |
+| POST      |   iam/user/email              |   Validar correo |
+| POST      |   iam/user/login              |   Iniciar sesión |
+| POST      |   iam/user/forgot/password    |	Enviar código a correo |
+| POST      |   iam/user/validate/code      |   Verificar código |
+| POST      |   iam/user/reset/password     |   Reestablecer contraseña |
 
 
 Endpoints user self
 
 | Method    |   Endpoint                |   Description |
 | --------- | --------------------------|---------------|
-| GET       |	user/me                 |	Obtener información de usuario autenticado |
-| PUT       |	user/profile            |	Actualizar perfil |
-| PUT       |	user/profile/pictura    |	Actualizar solo la foto de perfil |
-| PUT       |	user/reset/password     |	Actualizar contraseña |
-| GET       |	user/logout             |	Cerrar sesión |
+| GET       |	iam/user/me                 |	Obtener información de usuario autenticado |
+| PUT       |	iam/user/profile            |	Actualizar perfil |
+| PUT       |	iam/user/profile/pictura    |	Actualizar solo la foto de perfil |
+| PUT       |	iam/user/reset/password     |	Actualizar contraseña |
+| GET       |	iam/user/logout             |	Cerrar sesión |
 
 
 Endpoints user

@@ -1,6 +1,6 @@
 {
-    "name": "aloux-node-iam",
-    "version": "0.0.6",
+    "name": "aloux-sdk-iam",
+    "version": "0.0.7",
     "description": "Aloux Identity and Access Management for APIs ",
     "main": "index.js",
     "scripts": {
@@ -8,15 +8,15 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/alouxDeveloper/aloux-node-iam#readme"
+        "url": "git+https://github.com/alouxDeveloper/aloux-sdk-iam#readme"
       },
       "keywords": [
         "aloux",
-        "iam"
+        "IAM"
       ],
     "author": "Aloux",
     "license": "MIT",
-    "homepage": "https://github.com/alouxDeveloper/aloux-node-iam#readme",
+    "homepage": "https://github.com/alouxDeveloper/aloux-sdk-iam#readme",
     "dependencies": {
         "bcryptjs": "^2.4.3",
         "body-parser": "~1.19.0",
@@ -26,7 +26,8 @@
         "mongodb": "^3.5.11",
         "mongoose": "^5.13.3",
         "@aws-sdk/client-s3": "^3.293.0",
-        "@aws-sdk/client-ses": "^3.293.0"
+        "@aws-sdk/client-ses": "^3.293.0",
+        "yamljs": "^0.3.0"
     },
     "devDependencies": {
     }
