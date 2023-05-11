@@ -1,22 +1,23 @@
 {
-    "name": "aloux-sdk-iam",
-    "version": "0.0.7",
-    "description": "Aloux Identity and Access Management for APIs ",
+    "name": "aloux-sdk",
+    "version": "0.0.0",
+    "description": "Aloux SDK for APIs ",
     "main": "index.js",
     "scripts": {
         "test": ""
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/alouxDeveloper/aloux-sdk-iam#readme"
+        "url": "git+https://github.com/alouxDeveloper/aloux-sdk#readme"
       },
       "keywords": [
         "aloux",
+        "aloux-sdk",
         "IAM"
       ],
     "author": "Aloux",
     "license": "MIT",
-    "homepage": "https://github.com/alouxDeveloper/aloux-sdk-iam#readme",
+    "homepage": "https://github.com/alouxDeveloper/aloux-sdk#readme",
     "dependencies": {
         "bcryptjs": "^2.4.3",
         "body-parser": "~1.19.0",

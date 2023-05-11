@@ -1,11 +1,11 @@
 # Aloux SDK Identity and Access Management
 
-Uso de esta librearía para administración de menus, privilegios, funciones y usuarios
+Uso de esta librearía para administración de menus, privilegios, funciones, usuarios y envio de notificaciones por medio de correos y mensajes de texto
 
 ## Installation
 
 ```bash
-$ npm install aloux-sdk-iam --save
+$ npm install aloux-sdk --save
 ```
 
 
@@ -14,14 +14,14 @@ En archivo `init.js`
 
 ```js
 // Importación
-const { IAMRouter, IAMSwagger } = require('aloux-sdk-iam')
+const { IAMRouter, IAMSwagger } = require('aloux-sdk')
 
 // uso
-app.use(iam)
+app.use(IAMRouter)
 
 // uso swagger
 app.use(
-    "/docs-iam",
+    "/aloux-sdk",
     swaggerUI.serveFiles(IAMswagger, {}), 
     swaggerUI.setup(IAMswagger)
     )
@@ -36,7 +36,7 @@ En archivo `router.js`
 
 ```js
 // Importación
-const { IAMAuth } = require('aloux-sdk-iam')
+const { IAMAuth } = require('aloux-sdk')
 
 // uso (ejemplo)
 router.post('/customer', IAMAuth, customer.create)

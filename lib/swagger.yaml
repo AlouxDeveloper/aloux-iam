@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
-  title: aloux-sdk-iam
-  description: APIs para Aloux SDK IAM
+  title: aloux-sdk
+  description: APIs para Aloux SDK
   version: 1.0.0
   contact:
     name: API Aloux
@@ -31,6 +31,7 @@ paths:
                   email: 
                     description: email
                     type: string
+                    example: developer@aloux.mx
               required:
                 - email
       responses:
@@ -54,7 +55,7 @@ paths:
                   pwd:
                     description: password
                     type: string
-                    example: Cc12345
+                    example: Cc123456
               required:
                 - email
                 - pwd
