@@ -1,4 +1,4 @@
-const IAMrouter = require('./lib/router');
+const IAMrouter = require('./lib/router')
 const IAMauth = require('./lib/auth')
 const YAML = require('yamljs')
 const path = require('path')
