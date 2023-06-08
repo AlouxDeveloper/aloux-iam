@@ -1,4 +1,4 @@
-# Aloux SDK Identity and Access Management
+# Aloux SDK
 
 Uso de esta librearía para administración de menus, privilegios, funciones, usuarios y envio de notificaciones por medio de correos y mensajes de texto
 
