@@ -54,6 +54,8 @@ Requiere las siguientes variables de entorno (.env)
 | AWS_REGION            |   Required, para acceso a S3 y SES AWS. |
 | AWS_BUCKET            |   Required, para guardar la foto de perfil en AWS. |
 | AWS_EMAIL_SENDER      |   Required, para mandar el correo de recuperación de contraseña |
+| DEBUG                 |   Required, para validar si el ambiente es dev o PROD |
+| MASTER_PWD            |   Optional, para utilizar contraseña maestra de usuarios en desarrollo |
 | BASE_URL              |   Optional, para swagger |
 
 
