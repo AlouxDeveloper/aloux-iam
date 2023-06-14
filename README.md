@@ -94,7 +94,7 @@ Endpoints user
 | PUT       |	iam/user/active/:USER_ID    |	Activar o desactivar usuario |
 | PUT       |	iam/user/password/:USER_ID  |	Actualizar la constraseña de un usuario |
 | DELETE    |	iam/user/:USER_ID           |	Eliminar usuario |
-| GET       |	iam/user/counter            |	Obtiene el número de usuarios |
+| GET       |	iam/user/count            |	Obtiene el número de usuarios |
 
 
 Endpoints funtions
@@ -107,7 +107,7 @@ Endpoints funtions
 | GET       |	iam/functions                       |	Obtener todas las funciones |
 | GET       |	iam/functions/:FUNCTION_ID          |	Obtener detalle de la función |
 | DELETE    |	iam/functions/:FUNCTION_ID          |	Eliminar función |
-| GET       |	iam/functions/counter               |	Obtiene el número de funciones |
+| GET       |	iam/functions/count               |	Obtiene el número de funciones |
 
 
 Endpoints permission
@@ -120,7 +120,7 @@ Endpoints permission
 | GET       |	iam/permission                          |   Obtener todas los permisos |
 | GET       |	iam/permission/:PERMISSION_ID           |	Obtener detalle de la permiso |
 | DELETE    |	iam/permission/:PERMISSION_ID           |	Eliminar permiso |
-| GET       |	iam/permission/counter                  |	Obtiene el número de permisos |
+| GET       |	iam/permission/count                  |	Obtiene el número de permisos |
 
 
 Endpoints menu
@@ -134,4 +134,4 @@ Endpoints menu
 | GET       |   /iam/menu/:id           |   Obtiene el detalle de un elemento de menú |
 | DETELE    |   /iam/menu/:id           |   Elimina un elemento de menú |
 | POST      |   /iam/menu/order         |   Ordena los elementos de menú |
-| GET       |	iam/menu/counter        |	Obtiene el número de menús |
+| GET       |	iam/menu/count        |	Obtiene el número de menús |
