@@ -1,5 +1,6 @@
 const IAMrouter = require('./lib/router')
 const IAMauth = require('./lib/auth')
+const awsAloux = require('./lib/controllers/operationsAWS')
 const YAML = require('yamljs')
 const path = require('path')
 
@@ -23,5 +24,7 @@ swagger.servers[0].url = process.env.BASE_URL_API
     IAMUserModel: User,
     IAMFunctionsModel: Functions,
     IAMPermissionModel: Permission,
-    IAMMenuModel: Menu
+    IAMMenuModel: Menu,
+
+    AlouxAWS: awsAloux
 }
