@@ -1,6 +1,6 @@
 {
     "name": "aloux-sdk",
-    "version": "0.0.19",
+    "version": "0.0.20",
     "description": "Aloux SDK for APIs ",
     "main": "index.js",
     "scripts": {
