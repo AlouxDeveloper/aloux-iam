@@ -13,7 +13,11 @@ const Menu = require('./lib/models/Menu')
 // swagger
 const swagger_path =  path.resolve(__dirname,'./lib/swagger.yaml');
 const swagger = YAML.load(swagger_path);
-swagger.servers[0].url = process.env.BASE_URL_API
+
+if(process.env.DEBUG === 'true'){  
+    swagger['servers']=[]
+    swagger.servers.push({ url: process.env.SWAGGER_SERVER, description: 'DEV' })
+}
 
 
  module.exports = { 

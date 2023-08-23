@@ -7,9 +7,6 @@ info:
     name: API Aloux
     url: https://aloux.mx
     email: developer@aloux.mx
-servers:
-  - url: http://localhost
-    description: DEV
 components:
   securitySchemes:
     bearerAuth:            # arbitrary name for the security scheme
@@ -109,7 +106,7 @@ paths:
           'application/json':
             schema:
                   properties:
-                      email: 
+                      name: 
                         type: string
                         example: Martín
                       lastName: 
