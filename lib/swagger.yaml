@@ -16,10 +16,10 @@ components:
 paths:
   /iam/user/email:
     post:
-      summary: Validar email
+      summary: Validar que el correo exista
       tags:
         - users - self
-      description: Validar email
+      description: Validar que el correo exista
       requestBody:
         content:
           'application/json':
@@ -34,6 +34,12 @@ paths:
       responses:
         '200':    # status code
           description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  type:  string
   /iam/user/login:
     post:
       summary: Iniciar sesión
@@ -65,12 +71,112 @@ paths:
                 type: object
                 items: 
                   type: string
-  /iam/user/me:
+  /iam/user/verify/mail/token/{token}:
     get:
-      summary: Obtiene mi info.
+      parameters:
+        - name: token 
+          in: path 
+          description: token de verificación de cuenta 
+          required: true 
+          schema: 
+            type: string 
+      summary: Valida correo de la cuenta (Manda coreo de bienvenida)
       tags:
         - users - self
-      description: Obtiene mi inforación así como privilegios y elementos de menú asinados.
+      description: Valida correo de la cuenta (Manda coreo de bienvenida)
+      responses:
+        '200':    # status code
+          description: Return token
+          content:
+            application/json:
+              schema: 
+                type: object
+                items: 
+                  type: string
+  /iam/user/forgot/password:
+    post:
+      summary: Enviar código a correo
+      tags:
+        - users - self
+      description: Enviar código a correo
+      requestBody:
+        content:
+          'application/json':
+            schema:
+              properties:
+                  email: 
+                    description: email
+                    type: string
+                    example: developer@aloux.mx
+              required:
+                - email
+      responses:
+        '200':    # status code
+          description: Ok
+          content:
+            application/json:
+              schema: 
+                type: object
+                items: 
+                  type: string
+  /iam/user/validate/code:
+    post:
+      summary: Verificar código
+      tags:
+        - users - self
+      description: Verificar código
+      requestBody:
+        content:
+          'application/json':
+            schema:
+              properties:
+                  email: 
+                    description: email
+                    type: string
+                    example: developer@aloux.mx
+              required:
+                - email
+      responses:
+        '200':    # status code
+          description: ok
+          content:
+            application/json:
+              schema: 
+                type: object
+                items: 
+                  type: string
+  /iam/user/reset/password:
+    post:
+      summary: 	Reestablecer contraseña
+      tags:
+        - users - self
+      description: 	Reestablecer contraseña
+      requestBody:
+        content:
+          'application/json':
+            schema:
+              properties:
+                  email: 
+                    description: email
+                    type: string
+                    example: developer@aloux.mx
+              required:
+                - email
+      responses:
+        '200':    # status code
+          description: Return token
+          content:
+            application/json:
+              schema: 
+                type: object
+                items: 
+                  type: string
+  /iam/user/me:
+    get:
+      summary: Obtener información de usuario autenticado
+      tags:
+        - users - self
+      description: Obtener información de usuario autenticado
       security:
         - bearerAuth: []
       responses:
@@ -82,23 +188,194 @@ paths:
                 type: object
                 items: 
                   type: string
+  /iam/user/profile:
+    put:
+      summary: Actualizar perfil
+      tags:
+        - users - self
+      description: Actualizar perfil
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+                  properties:
+                      name: 
+                        type: string
+                        example: Martín
+                      lastName: 
+                        type: string
+                        example: Martínez
+                      email: 
+                        description: email
+                        type: string
+                        example: developer@aloux.mx
+                      pwd:
+                        description: password
+                        type: string
+                        example: Cc12345
+                      phone:
+                        type: string
+                        example: +525567087001
+                      _functions:
+                        type: array
+                        items:
+                          type: string
+                          format: ObjectId
+                          example: "61b06de713a90b4d6dce7224"
+                      _client:
+                        type: array
+                        items:
+                          type: string
+                          format: ObjectId
+                          example: "64371ab1b6dc1417c9c0b812"
+                  required:
+                    - email
+                    - pwd
+      responses:
+        '202':    # status code
+          description: A JSON object of a client
+          content:
+            application/json:
+              schema: 
+                type: object
+                items: 
+                  type: string
+  /iam/user/profile/pictura:
+    put:
+      summary: 	Actualizar solo la foto de perfil
+      tags:
+        - users - self
+      description: 	Actualizar solo la foto de perfil
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                urlImg:
+                  description: Variable en donde se carga la imagen seleccionada del usuario
+                  type: string
+                  format: binary
+      responses:
+        '202':    # status code
+          description: Retorna el estado de actualización de la imagen de perfil del usuario
+          content:
+            application/json:
+              schema: 
+                type: object
+                items: 
+                  type: string
   /iam/user/logout:
     post:
       summary: Cerrar sesión 
       tags:
         - users - self
-      description: Cierra la sesión de un usuario
+      description: Cierra la sesión de mi usuario
       security:
         - bearerAuth: []
       responses:
         '200':    # status code
           description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  type: string
   /iam/user:
     post:
       summary: Crear un usuario
       tags:
         - users
-      description: Crear un nuevo usuario
+      description: Crea un nuevo usuario
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+                  properties:
+                      name: 
+                        type: string
+                        example: Martín
+                      lastName: 
+                        type: string
+                        example: Martínez
+                      email: 
+                        description: email
+                        type: string
+                        example: developer@aloux.mx
+                      pwd:
+                        description: password
+                        type: string
+                        example: Cc12345
+                      phone:
+                        type: string
+                        example: +525567087001
+                      _functions:
+                        type: array
+                        items:
+                          type: string
+                          format: ObjectId
+                          example: "61b06de713a90b4d6dce7224"
+                      _client:
+                        type: array
+                        items:
+                          type: string
+                          format: ObjectId
+                          example: "64371ab1b6dc1417c9c0b812"
+                  required:
+                    - email
+                    - pwd
+      responses:
+        '200':    # status code
+          description: Ok
+    get:
+      summary: 	Obtener todos los usuario
+      tags:
+        - users
+      description:	Obtener todos los usuario
+      security:
+        - bearerAuth: []
+      responses:
+        '200':    # status code
+          description: Retorna una lista de objetos de los usuarios registrados
+  /iam/user/{USER_ID}:
+    get:
+      parameters:
+      - name: USER_ID
+        in: path
+        description: Obtener detalle de usuario
+        required: true
+        schema:
+          type: string
+          format: ObjectId
+      summary: Obtener detalle de usuario
+      tags:
+        - users
+      description: Obtener detalle de usuario
+      security:
+        - bearerAuth: []
+      responses:
+        '200':    # status code
+          description: Retorna un objeto JSON de un usuario
+    patch:
+      parameters:
+      - name: USER_ID
+        in: path
+        description: ID de un usuario que este registrado
+        required: true
+        schema:
+          type: string
+          format: ObjectId
+      summary: 	Actualizar usuario
+      tags:
+        - users
+      description: Actualizar usuario
       security:
         - bearerAuth: []
       requestBody:
@@ -128,4 +405,613 @@ paths:
                     - pwd
       responses:
         '200':    # status code
+          description: Retorna un objeto JSON de un usuario
+    delete:
+      parameters:
+      - name: USER_ID
+        in: path
+        description: ID de un usuario que este registrado
+        required: true
+        schema:
+          type: string
+          format: ObjectId
+      summary: Eliminar usuario
+      tags:
+        - users
+      description: Eliminar usuario
+      security:
+        - bearerAuth: []
+      responses:
+        '200':    # status code
           description: Ok
+  /iam/user/{USER_ID}/status:
+    put:
+      parameters:
+      - name: USER_ID
+        in: path
+        description: ID de un usuario que este registrado
+        required: true
+        schema:
+          type: string
+          format: ObjectId
+      summary: 	Activar o desactivar usuario
+      tags:
+        - users
+      description: Activar o desactivar usuario
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          'application/json':
+            schema:
+                  properties:
+                      status: 
+                        type: string
+                        example: Activo
+      responses:
+        '200':    # status code
+          description: Retorna result from response
+  /iam/user/password/{USER_ID}:
+    put:
+      parameters:
+      - name: USER_ID
+        in: path
+        description: ID de un usuario que este registrado
+        required: true
+        schema:
+          type: string
+          format: ObjectId
+      summary: Actualizar la constraseña de un usuario
+      tags:
+        - users
+      description: Actualizar la constraseña de un usuario
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          'application/json':
+            schema:
+                  properties:
+                      pwd: 
+                        type: string
+                        example: Cc12345
+      responses:
+        '200':    # status code
+          description: Retorna result from response
+  /iam/user/count/all:
+    get:
+      summary: Obtiene el número de usuarios
+      tags:
+        - users
+      description: Obtiene el número de usuarios
+      security:
+        - bearerAuth: []
+      responses:
+        '200':    # status code
+          description: Retorna el resultado de la respuesta
+  /iam/functions:
+    post:
+      summary: Crea una función
+      tags:
+        - functions
+      description: Crea una función
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          'application/json':
+            schema:
+                  properties:
+                      name: 
+                        type: string
+                        example: Propietario
+                      description: 
+                        type: string
+                        example: Acceso a todas las funcionalidades de la plataforma
+                      _permissions:
+                        type: string
+                        format: ObjectId
+                        example: "61b06de713a90b4d6dce5141"
+                  required:
+                    - name
+      responses:
+        '201':    # status code
+          description: ok
+    get:
+      summary: 	Obtener todas las funciones
+      tags:
+        - functions
+      description: 	Obtener todas las funciones
+      security:
+        - bearerAuth: []
+      responses:
+        '200':    # status code
+          description: Retorna el resultado de la respuesta
+  /iam/functions/{FUNCTION_ID}:
+    get:
+      parameters:
+      - name: FUNCTION_ID
+        in: path
+        description: ID de un funcion que este registrada
+        required: true
+        schema:
+          type: string
+          format: ObjectId
+      summary: 	Obtener detalle de la función
+      tags:
+        - functions
+      description: 	Obtener detalle de la función
+      security:
+        - bearerAuth: []
+      responses:
+        '200':    # status code
+          description: Retorna el resultado de la respuesta
+    patch:
+      parameters:
+      - name: FUNCTION_ID
+        in: path
+        description: ID de una función que este registrada
+        required: true
+        schema:
+          type: string
+          format: ObjectId
+      summary: 	Actualizar función
+      tags:
+        - functions
+      description: 	Actualizar función
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          'application/json':
+            schema:
+                  properties:
+                      name: 
+                        type: string
+                        example: Propietario
+                      description: 
+                        type: string
+                        example: Acceso a todas las funcionalidades de la plataforma
+                      _permissions:
+                        type: string
+                        format: ObjectId
+                        example: "61b06de713a90b4d6dce5141"
+                  required:
+                    - name
+      responses:
+        '200':    # status code
+          description: Retorna un objeto JSON de una función
+    delete:
+      parameters:
+      - name: FUNCTION_ID
+        in: path
+        description: ID de una función que este registrado
+        required: true
+        schema:
+          type: string
+          format: ObjectId
+      summary: 	Eliminar función
+      tags:
+        - functions
+      description: 	Eliminar función
+      security:
+        - bearerAuth: []
+      responses:
+        '200':    # status code
+          description: Ok
+  /iam/functions/{FUNCTION_ID}/status:
+    put:
+      parameters:
+      - name: FUNCTION_ID
+        in: path
+        description: ID de una función que este registrada
+        required: true
+        schema:
+          type: string
+          format: ObjectId
+      summary: 	Activar o desactivar función
+      tags:
+        - functions
+      description: 	Activar o desactivar función
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          'application/json':
+            schema:
+                  properties:
+                      status: 
+                        type: string
+                        example: Activo
+      responses:
+        '200':    # status code
+          description: Retorna el resultado de la respuesta
+  /iam/functions/count/all:
+    get:
+      summary: 	Obtiene el número de funciones
+      tags:
+        - functions
+      description: 	Obtiene el número de funciones
+      security:
+        - bearerAuth: []
+      responses:
+        '200':    # status code
+          description: Retorna el resultado de la respuesta
+  /iam/permission:
+    post:
+      summary: Crea un permiso
+      tags:
+        - permissions
+      description: Crea un permiso
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          'application/json':
+            schema:
+                  properties:
+                      description: 
+                        description: Describe la funcionalidad del permiso
+                        type: string
+                      method: 
+                        description: Tipo de HTTP REQUEST del permiso
+                        type: string
+                        example: GET
+                      api:
+                        description: ruta que accede a la función que utilice el permiso
+                        type: string
+                        example: "api.create"
+                      endpoint:
+                        description: path del permiso 
+                        type: string
+                        example: "/api/permissions"
+                      auth:
+                        description: Identifica si para acceder al permiso necesita un token o es público
+                        type: number
+                        example: 1
+                      _menu:
+                        description: hace referencia a si el permiso pertenece a un menú en especifíco
+                        type: string
+                        format: ObjectId
+                        example: "61b06de713a90b4d6dce7171"
+                  required:
+                    - description 
+                    - method 
+                    - api 
+                    - endpoint 
+                    - _menu
+      responses:
+        '201':    # status code
+          description: retorna el resultado de la respuesta
+    get:
+      summary: 	Obtener todos los permisos
+      tags:
+        - permissions
+      description: 	Obtener todos los permisos
+      security:
+        - bearerAuth: []
+      responses:
+        '200':    # status code
+          description: Retorna una lista de objetos JSON
+  /iam/permission/{PERMISSION_ID}:
+    get:
+      parameters:
+      - name: PERMISSION_ID
+        in: path
+        description: ID de un permiso que este registrado
+        required: true
+        schema:
+          type: string
+          format: ObjectId
+      summary: Obtener detalle del permiso
+      tags:
+        - permissions
+      description: Obtener detalle del permiso
+      security:
+        - bearerAuth: []
+      responses:
+        '200':    # status code
+          description: Retorna un objeto JSON
+    patch:
+      parameters:
+      - name: PERMISSION_ID
+        in: path
+        description: ID de un permiso que este registrado
+        required: true
+        schema:
+          type: string
+          format: ObjectId
+      summary: Actualizar permiso
+      tags:
+        - permissions
+      description: Actualizar permiso
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          'application/json':
+            schema:
+                  properties:
+                      description: 
+                        description: Describe la funcionalidad del permiso
+                        type: string
+                      method: 
+                        description: Tipo de HTTP REQUEST del permiso
+                        type: string
+                        example: GET
+                      api:
+                        description: ruta que accede a la función que utilice el permiso
+                        type: string
+                        example: "api.create"
+                      endpoint:
+                        description: path del permiso 
+                        type: string
+                        example: "/api/permissions"
+                      auth:
+                        description: Identifica si para acceder al permiso necesita un token o es público
+                        type: number
+                        example: 1
+                      _menu:
+                        description: hace referencia a si el permiso pertenece a un menú en especifíco
+                        type: string
+                        format: ObjectId
+                        example: "61b06de713a90b4d6dce7171"
+      responses:
+        '200':    # status code
+          description: Retorna un objeto JSON de un permiso
+    delete:
+      parameters:
+      - name: PERMISSION_ID
+        in: path
+        description: ID de un permiso que este registrado
+        required: true
+        schema:
+          type: string
+          format: ObjectId
+      summary: 	Eliminar permiso
+      tags:
+        - permissions
+      description: 	Eliminar permiso
+      security:
+        - bearerAuth: []
+      responses:
+        '200':    # status code
+          description: Ok
+  /iam/permission/{PERMISSION_ID}/status:
+    put:
+      parameters:
+      - name: PERMISSION_ID
+        in: path
+        description: ID de un permiso que este registrado
+        required: true
+        schema:
+          type: string
+          format: ObjectId
+      summary: Activar o desactivar permiso
+      tags:
+        - permissions
+      description: Activar o desactivar permiso
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          'application/json':
+            schema:
+                  properties:
+                      status: 
+                        type: string
+                        example: Activo
+      responses:
+        '200':    # status code
+          description: Retorna el resultado de la respuesta
+  /iam/permission/count/all:
+    get:
+      summary: Obtiene el número de permisos
+      tags:
+        - permissions
+      description: Obtiene el número de permisos
+      security:
+        - bearerAuth: []
+      responses:
+        '200':    # status code
+          description: Retorna el resultado de la respuesta
+  /iam/menu:
+    post:
+      summary: Crea un menú
+      tags:
+        - menús
+      description: Crea un menú
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+                  properties:
+                      label: 
+                        description: Nombre del Menú
+                        type: string
+                        example: "IAM"
+                      path: 
+                        description: Ruta de acceso al menú
+                        type: string
+                        example: "/dashboard/iam"
+                      icon:
+                        description: icono del menú
+                        type: string
+                        example: "mdi-shield-account"
+                      index:
+                        description: path del permiso 
+                        type: number
+                        example: 1
+                      _menu:
+                        description: hace referencia a si el menú que se va a crear es un submenú de un menú ya registrado
+                        type: string
+                        format: ObjectId
+                        example: "61b06de713a90b4d6dce7171"
+                  required:
+                    - label 
+                    - path 
+                    - icon 
+      responses:
+        '201':    # status code
+          description: retorna un objeto JSON
+    get:
+      summary: Obtiene todos los elementos de menú
+      tags:
+        - menús
+      description: Obtiene todos los elementos de menú
+      security:
+        - bearerAuth: []
+      responses:
+        '200':    # status code
+          description: Retorna una lista de objetos JSON
+  /iam/menu/{MENU_ID}:
+    get:
+      parameters:
+      - name: MENU_ID
+        in: path
+        description: ID de un menú que este registrado
+        required: true
+        schema:
+          type: string
+          format: ObjectId
+      summary: Obtiene el detalle de un elemento de menú
+      tags:
+        - menús
+      description: Obtiene el detalle de un elemento de menú
+      security:
+        - bearerAuth: []
+      responses:
+        '200':    # status code
+          description: Retorna un objeto JSON
+    patch:
+      parameters:
+      - name: MENU_ID
+        in: path
+        description: ID de un menú que este registrado
+        required: true
+        schema:
+          type: string
+          format: ObjectId
+      summary: Actualiza un elemento de menú
+      tags:
+        - menús
+      description: Actualiza un elemento de menú
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          'application/json':
+            schema:
+                properties:
+                    label: 
+                      description: Nombre del Menú
+                      type: string
+                      example: "IAM"
+                    path: 
+                      description: Ruta de acceso al menú
+                      type: string
+                      example: "/dashboard/iam"
+                    icon:
+                      description: icono del menú
+                      type: string
+                      example: "mdi-shield-account"
+                    index:
+                      description: path del permiso 
+                      type: number
+                      example: 1
+                    _menu:
+                      description: hace referencia a si el menú que se va a crear es un submenú de un menú ya registrado
+                      type: string
+                      format: ObjectId
+                      example: "61b06de713a90b4d6dce7171"
+                required:
+                  - label 
+                  - path 
+                  - icon 
+      responses:
+        '200':    # status code
+          description: Retorna un objeto JSON 
+    delete:
+      parameters:
+      - name: MENU_ID
+        in: path
+        description: ID de un menú que este registrado
+        required: true
+        schema:
+          type: string
+          format: ObjectId
+      summary: Elimina un elemento de menú
+      tags:
+        - menús
+      description: Elimina un elemento de menú
+      security:
+        - bearerAuth: []
+      responses:
+        '200':    # status code
+          description: Ok
+  /iam/menu/{MENU_ID}/status:
+    put:
+      parameters:
+      - name: MENU_ID
+        in: path
+        description: ID de un menú que este registrado
+        required: true
+        schema:
+          type: string
+          format: ObjectId
+      summary: Activa o desactiva un menú
+      tags:
+        - menús
+      description: Activa o desactiva un menú
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+                  properties:
+                      status: 
+                        type: string
+                        example: Activo
+      responses:
+        '200':    # status code
+          description: Retorna el resultado de la respuesta
+  /iam/menu/count/all:
+    get:
+      summary: Obtiene el número de menús
+      tags:
+        - menús
+      description: Obtiene el número de menús
+      security:
+        - bearerAuth: []
+      responses:
+        '200':    # status code
+          description: Retorna el resultado de la respuesta
+  /iam/menu/order:
+    post:
+      summary: Ordena los elementos de menú
+      tags:
+        - menús
+      description: Ordena los elementos de menú
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          'application/json':
+            schema:
+                  properties:
+                      length: 
+                        type: object
+                        properties:
+                          _id:
+                            type: string
+                            format: ObjectId
+                            example: 64bab1c64b2bce1394cc6491
+                          index: 
+                            type: number
+                            example: 54
+      responses:
+        '200':    # status code
+          description: Retorna el resultado de la respuesta
