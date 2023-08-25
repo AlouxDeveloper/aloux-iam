@@ -71,6 +71,32 @@ paths:
                 type: object
                 items: 
                   type: string
+  /iam/user/send/verify/mail: 
+    post: 
+      tags: 
+        - users - self 
+      summary: Enviar correo para verificar correo de la cuenta
+      description: Enviar correo para verificar correo de la cuenta 
+      requestBody: 
+        content: 
+          'application/json':
+            schema: 
+              properties:
+                email: 
+                  description: email 
+                  type: string 
+                  example: developer@aloux.mx
+              required: 
+                - email
+      responses: 
+        '200': 
+          description: ok 
+          content: 
+            application/json:
+              schema: 
+                type: object
+                items: 
+                  type: string 
   /iam/user/verify/mail/token/{token}:
     get:
       parameters:
@@ -134,6 +160,10 @@ paths:
                     description: email
                     type: string
                     example: developer@aloux.mx
+                  resetCode:
+                    description: código de verificación
+                    type: number 
+                    example: 2137
               required:
                 - email
       responses:
@@ -160,8 +190,18 @@ paths:
                     description: email
                     type: string
                     example: developer@aloux.mx
+                  pwd: 
+                    description: contraseña nueva 
+                    type: string 
+                    example: "Cc123456"
+                  resetCode: 
+                    description: código de verificación 
+                    type: string 
+                    example: 2137
               required:
-                - email
+                - email 
+                - pwd 
+                - resetCode
       responses:
         '200':    # status code
           description: Return token
@@ -263,6 +303,58 @@ paths:
       responses:
         '202':    # status code
           description: Retorna el estado de actualización de la imagen de perfil del usuario
+          content:
+            application/json:
+              schema: 
+                type: object
+                items: 
+                  type: string
+  /iam/user/send/verify/phone:
+    post:
+      summary: 	Enviar código al teléfono de la cuenta para verificarla
+      tags:
+        - users - self
+      description: 	Enviar código al teléfono de la cuenta para verificarla
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                phone:
+                  description: Teléfono de la cuenta del usuario
+                  type: string
+                  example: "+522491609423"
+      responses:
+        '200':    # status code
+          description: ok
+          content:
+            application/json:
+              schema: 
+                type: object
+                items: 
+                  type: string
+  /iam/user/verify/phone:
+    post:
+      summary: Valida teléfono del usuario de la cuenta
+      tags:
+        - users - self
+      description: 	Valida teléfono del usuario de la cuenta
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                codeVerifyPhone:
+                  description: Código de verificación
+                  type: number
+                  example: 2137
+      responses:
+        '200':    # status code
+          description: ok
           content:
             application/json:
               schema: 
