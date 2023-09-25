@@ -11,18 +11,18 @@ const Permission = require('./lib/models/Permission')
 const Menu = require('./lib/models/Menu')
 
 // swagger
-const swagger_path =  path.resolve(__dirname,'./lib/swagger.yaml');
-const swagger = YAML.load(swagger_path);
+const swagger_path = path.resolve(__dirname, './lib/swagger.yaml')
+const swagger = YAML.load(swagger_path)
 
-if(process.env.DEBUG === 'true'){  
-    swagger['servers']=[]
+if (process.env.DEBUG === 'true') {
+    swagger['servers'] = []
     swagger.servers.push({ url: process.env.SWAGGER_SERVER, description: 'DEV' })
 }
 
 
- module.exports = { 
-    IAMRouter: IAMrouter, 
-    IAMAuth: IAMauth, 
+module.exports = {
+    IAMRouter: IAMrouter,
+    IAMAuth: IAMauth,
     IAMSwagger: swagger,
 
     IAMUserModel: User,
