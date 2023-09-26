@@ -14,7 +14,7 @@ components:
       scheme: bearer
       bearerFormat: JWT
 paths:
-  /iam/user/email:
+  /iam/auth/email:
     post:
       summary: Validar que el correo exista
       tags:
@@ -40,7 +40,7 @@ paths:
                 type: object
                 items:
                   type:  string
-  /iam/user/login:
+  /iam/auth/login:
     post:
       summary: Iniciar sesión
       tags:
