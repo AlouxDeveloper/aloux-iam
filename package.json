@@ -1,7 +1,7 @@
 {
-    "name": "aloux-sdk",
-    "version": "0.0.32",
-    "description": "Aloux SDK for APIs ",
+    "name": "aloux-iam",
+    "version": "0.0.0",
+    "description": "Aloux IAM for APIs ",
     "main": "index.js",
     "scripts": {
         "test": ""
@@ -12,7 +12,7 @@
       },
       "keywords": [
         "aloux",
-        "aloux-sdk",
+        "aloux-iam",
         "IAM"
       ],
     "author": "Aloux",
