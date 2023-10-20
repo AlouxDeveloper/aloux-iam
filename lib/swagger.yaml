@@ -97,7 +97,7 @@ paths:
                 type: object
                 items: 
                   type: string 
-  /iam/user/verify/mail/token/{token}:
+  /iam/auth/verify/mail/token/{token}:
     get:
       parameters:
         - name: token 
@@ -119,7 +119,7 @@ paths:
                 type: object
                 items: 
                   type: string
-  /iam/user/forgot/password:
+  /iam/auth/forgot/password:
     post:
       summary: Enviar código a correo
       tags:
@@ -145,7 +145,7 @@ paths:
                 type: object
                 items: 
                   type: string
-  /iam/user/validate/code:
+  /iam/auth/validate/code:
     post:
       summary: Verificar código
       tags:
@@ -175,7 +175,7 @@ paths:
                 type: object
                 items: 
                   type: string
-  /iam/user/reset/password:
+  /iam/auth/reset/password:
     post:
       summary: 	Reestablecer contraseña
       tags:
@@ -211,7 +211,7 @@ paths:
                 type: object
                 items: 
                   type: string
-  /iam/user/me:
+  /iam/auth/me:
     get:
       summary: Obtener información de usuario autenticado
       tags:
@@ -228,7 +228,7 @@ paths:
                 type: object
                 items: 
                   type: string
-  /iam/user/profile:
+  /iam/auth/profile:
     put:
       summary: Actualizar perfil
       tags:
@@ -282,7 +282,7 @@ paths:
                 type: object
                 items: 
                   type: string
-  /iam/user/profile/pictura:
+  /iam/auth/profile/pictura:
     put:
       summary: 	Actualizar solo la foto de perfil
       tags:
@@ -309,7 +309,7 @@ paths:
                 type: object
                 items: 
                   type: string
-  /iam/user/send/verify/phone:
+  /iam/auth/send/verify/phone:
     post:
       summary: 	Enviar código al teléfono de la cuenta para verificarla
       tags:
@@ -335,7 +335,7 @@ paths:
                 type: object
                 items: 
                   type: string
-  /iam/user/verify/phone:
+  /iam/auth/verify/phone:
     post:
       summary: Valida teléfono del usuario de la cuenta
       tags:
@@ -361,7 +361,7 @@ paths:
                 type: object
                 items: 
                   type: string
-  /iam/user/logout:
+  /iam/auth/logout:
     post:
       summary: Cerrar sesión 
       tags:
