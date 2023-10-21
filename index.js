@@ -1,5 +1,5 @@
 const IAMrouter = require('./lib/router')
-const IAMauth = require('./lib/auth')
+const IAMauth = require('./lib/middleware')
 const awsAloux = require('./lib/controllers/operationsAWS')
 const YAML = require('yamljs')
 const path = require('path')
