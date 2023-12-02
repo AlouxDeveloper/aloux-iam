@@ -71,7 +71,7 @@ paths:
                 type: object
                 items: 
                   type: string
-  /iam/auth/send/verify/mail: 
+  /iam/auth/verify/mail: 
     post: 
       tags: 
         - users - self 
