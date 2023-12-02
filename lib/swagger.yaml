@@ -71,7 +71,7 @@ paths:
                 type: object
                 items: 
                   type: string
-  /iam/user/send/verify/mail: 
+  /iam/auth/send/verify/mail: 
     post: 
       tags: 
         - users - self 
@@ -136,6 +136,74 @@ paths:
                     example: developer@aloux.mx
               required:
                 - email
+      responses:
+        '200':    # status code
+          description: Ok
+          content:
+            application/json:
+              schema: 
+                type: object
+                items: 
+                  type: string
+  /iam/auth/signup:
+    post:
+      summary: Registrarse
+      tags:
+        - users - self
+      description: Crea una cuenta
+      requestBody:
+        content:
+          'application/json':
+            schema:
+              properties:
+                  name:
+                    description: Name
+                    type: string
+                    example: Arturo
+                  lastName:
+                    description: Last name
+                    type: string
+                    example: Vázquez
+                  phone:
+                    description: Phone
+                    type: string
+                    example: 1234567891011
+                    maxLength: 13
+                  email: 
+                    description: email
+                    type: string
+                    example: developer@aloux.mx
+                  pwd:
+                    description: password
+                    type: string
+                    example: password
+                    minLength: 8
+                  data:
+                    type: object
+                    properties:
+                      age:
+                        description: Age
+                        type: integer
+                        example: 26
+                      gender:
+                        description: Gender
+                        type: string
+                        enum: ["male","female"]
+                      scholarship:
+                        description: Scholarship
+                        type: string
+                        example: university
+                      Entity:
+                        description: Entity
+                        type: string
+                        example: Puebla
+              required:
+                - name
+                - lastName
+                - phone
+                - email
+                - pwd
+                - data
       responses:
         '200':    # status code
           description: Ok
