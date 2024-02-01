@@ -65,22 +65,27 @@ Endpoints user self (no auth)
 
 | Method    |   Endpoint                |   Description |
 | --------- | --------------------------|---------------|
-| POST      |   iam/user/email              |   Validar correo |
-| POST      |   iam/user/login              |   Iniciar sesión |
-| POST      |   iam/user/forgot/password    |	Enviar código a correo |
-| POST      |   iam/user/validate/code      |   Verificar código |
-| POST      |   iam/user/reset/password     |   Reestablecer contraseña |
+| POST      |   iam/auth/email              |   Validar correo |
+| POST      |   iam/auth/login              |   Iniciar sesión |
+| POST      |   iam/auth/forgot/password    |	Enviar código a correo |
+| POST      |   iam/auth/validate/code      |   Verificar código |
+| POST      |   iam/auth/verify/mail        |   Verificar correo |
+| GET       |   iam/auth/verify/mail/token/:token  | Valida correo (Manda correo de bienvenida) |
+| POST      |   iam/auth/reset/password     |   Reestablecer contraseña |
+| POST      |   iam/auth/signup             |   Registrarse |
 
 
 Endpoints user self
 
 | Method    |   Endpoint                |   Description |
 | --------- | --------------------------|---------------|
-| GET       |	iam/user/me                 |	Obtener información de usuario autenticado |
-| PUT       |	iam/user/profile            |	Actualizar perfil |
-| PUT       |	iam/user/profile/pictura    |	Actualizar solo la foto de perfil |
-| PUT       |	iam/user/reset/password     |	Actualizar contraseña |
-| GET       |	iam/user/logout             |	Cerrar sesión |
+| GET       |	iam/auth/me                 |	Obtener información de usuario autenticado |
+| PUT       |	iam/auth/profile            |	Actualizar perfil |
+| PUT       |	iam/auth/profile/pictura    |	Actualizar solo la foto de perfil |
+| PUT       |	iam/auth/reset/password     |	Actualizar contraseña |
+| POST      |   iam/auth/send/verify/phone  |   Enviar código al teléfono de la cuenta para verificarla |
+| POST      |   iam/auth/verify/phone       | Valida teléfono del usuario de la cuenta |
+| POST      |	iam/auth/logout             |	Cerrar sesión |
 
 
 Endpoints user
@@ -91,10 +96,10 @@ Endpoints user
 | GET       |	iam/user                    |	Obtener todos los usuario |
 | GET       |	iam/user/:USER_ID           |	Obtener detalle de usuario |
 | PUT       |	iam/user/:USER_ID           |	Actualizar usuario |
-| PUT       |	iam/user/active/:USER_ID    |	Activar o desactivar usuario |
+| PUT       |	iam/user/:USER_ID/status    |	Activar o desactivar usuario |
 | PUT       |	iam/user/password/:USER_ID  |	Actualizar la constraseña de un usuario |
 | DELETE    |	iam/user/:USER_ID           |	Eliminar usuario |
-| GET       |	iam/user/count            |	Obtiene el número de usuarios |
+| GET       |	iam/user/count/all            |	Obtiene el número de usuarios |
 
 
 Endpoints funtions
@@ -103,11 +108,11 @@ Endpoints funtions
 | --------- | --------------------------------------|----------------|
 | POST      |   iam/functions                       |   Crear función |
 | PUT       |	iam/functions/:FUNCTION_ID          |	Actualizar función |
-| PUT       |	iam/functions/active/:FUNCTION_ID   |	Activar o desactivar función |
+| PUT       |	iam/functions/:FUNCTION_ID/status   |	Activar o desactivar función |
 | GET       |	iam/functions                       |	Obtener todas las funciones |
 | GET       |	iam/functions/:FUNCTION_ID          |	Obtener detalle de la función |
 | DELETE    |	iam/functions/:FUNCTION_ID          |	Eliminar función |
-| GET       |	iam/functions/count               |	Obtiene el número de funciones |
+| GET       |	iam/functions/count/all               |	Obtiene el número de funciones |
 
 
 Endpoints permission
@@ -116,11 +121,11 @@ Endpoints permission
 | --------- | ------------------------------------------|---------------|
 | POST      |	iam/permission                          |   Crear permiso
 | PUT       |	iam/permission/:PERMISSION_ID           |	Actualizar permiso |
-| PUT       |	iam/permission/active/:PERMISSION_ID    |	Activar o desactivar permiso |
+| PUT       |	iam/permission/:PERMISSION_ID/status    |	Activar o desactivar permiso |
 | GET       |	iam/permission                          |   Obtener todas los permisos |
 | GET       |	iam/permission/:PERMISSION_ID           |	Obtener detalle de la permiso |
 | DELETE    |	iam/permission/:PERMISSION_ID           |	Eliminar permiso |
-| GET       |	iam/permission/count                  |	Obtiene el número de permisos |
+| GET       |	iam/permission/count/all                  |	Obtiene el número de permisos |
 
 
 Endpoints menu
@@ -128,10 +133,37 @@ Endpoints menu
 | Method    |   Endpoint                |   Description |
 | --------- | --------------------------|---------------|
 | POST      |   /iam/menu               |   Crea un elemento de menú |
-| PUT       |   /iam/menu/:id           |   Actualiza un elemento de menú |
-| PUT       |   /iam/menu/active/:id    |   Activa o desactiva un menú |
+| PUT       |   /iam/menu/:MENU_ID           |   Actualiza un elemento de menú |
+| PUT       |   /iam/menu/:MENU_ID/status    |   Activa o desactiva un menú |
 | GET       |   /iam/menu               |   Obtiene todos los elementos de menú |
-| GET       |   /iam/menu/:id           |   Obtiene el detalle de un elemento de menú |
-| DETELE    |   /iam/menu/:id           |   Elimina un elemento de menú |
+| GET       |   /iam/menu/:MENU_ID           |   Obtiene el detalle de un elemento de menú |
+| DELETE    |   /iam/menu/:MENU_ID           |   Elimina un elemento de menú |
 | POST      |   /iam/menu/order         |   Ordena los elementos de menú |
 | GET       |	iam/menu/count        |	Obtiene el número de menús |
+
+
+## Aloux-AWS
+
+### Usage
+
+```js
+// Importación
+const { AlouxAWS } = require('aloux-iam')
+
+// uso
+// se busca el elemento a actualizar
+let example = await Example.findOne({ _id: req.example._id })
+
+/**
+ * pathFile = folder/file_name-file_id
+ * file     = req.files.property
+ */
+// se crea una constante para poder guardar el nuevo elemento
+const result = await AlouxAWS.upload('carpet/'+ 'file_name' + file_id, req.files.data);
+
+// se actualiza el resultado
+example.result = result
+const updateEcample = await example.save()
+
+
+```
