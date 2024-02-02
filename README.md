@@ -144,26 +144,90 @@ Endpoints menu
 
 ## Aloux-AWS
 
-### Usage
-
+### Usage for files
+#### Aggregate file
 ```js
 // Importación
 const { AlouxAWS } = require('aloux-iam')
 
 // uso
-// se busca el elemento a actualizar
-let example = await Example.findOne({ _id: req.example._id })
+// variables necesarias
+/*
+* AWS_REGION
+* AWS_BUCKET
+*/
 
 /**
  * pathFile = folder/file_name-file_id
  * file     = req.files.property
  */
 // se crea una constante para poder guardar el nuevo elemento
-const result = await AlouxAWS.upload('carpet/'+ 'file_name' + file_id, req.files.data);
+const result = await AlouxAWS.upload('folder/file_name' + req.files.data);
 
-// se actualiza el resultado
-example.result = result
-const updateEcample = await example.save()
+```
 
+#### Eliminate many files
+```js
+// Importación
+const { AlouxAWS } = require('aloux-iam')
+
+// uso
+// variables necesarias
+/*
+* AWS_REGION
+* AWS_BUCKET
+*/
+
+/**
+ * files = [{key: 'folder/file1'},{key: 'folder/file1'}]
+ */
+// Elimina las imagenes seleccionadas
+const files = [{key: 'folder/file1'},{key: 'folder/file1'}]
+const deleteImages = await AlouxAWS.delete(files)
+
+```
+
+#### Eliminate file
+```js
+// Importación
+const { AlouxAWS } = require('aloux-iam')
+
+// uso
+// variables necesarias
+/*
+* AWS_REGION
+* AWS_BUCKET
+*/
+
+/**
+ * file = folder/file_name
+ */
+// Elimina la imagen 
+const file = 'folder/file_name' + req.params.MODEL_ID
+const deleteImg = await AlouxAWS.delete(file)
+
+```
+
+### Usage for emails
+#### Send email
+```js
+// Importación
+const { AlouxAWS } = require('aloux-iam')
+
+// uso
+// variables necesarias
+/*
+* AWS_REGION
+* AWS_EMAIL_SENDER
+*/
+
+/**
+ * email: Destination email
+ * message: Mail body
+ * subject: Mail subject
+ */
+// se crea una constante para poder guardar el nuevo elemento
+const { email, message, subject } = req.body
+const sendEmail = await AlouxAWS.sendCustom(email, message, subject)
 
 ```
