@@ -151,7 +151,7 @@ Endpoints menu
 const { AlouxAWS } = require('aloux-iam')
 
 // uso
-// variables necesarias
+// variables
 /*
 * AWS_REGION
 * AWS_BUCKET
@@ -161,8 +161,8 @@ const { AlouxAWS } = require('aloux-iam')
  * pathFile = folder/file_name-file_id
  * file     = req.files.property
  */
-// se crea una constante para poder guardar el nuevo elemento
-const result = await AlouxAWS.upload('folder/file_name' + req.files.data);
+// a constant is created to save the new element
+const result = await AlouxAWS.upload('folder/file_name', req.files.data);
 
 ```
 
@@ -172,7 +172,7 @@ const result = await AlouxAWS.upload('folder/file_name' + req.files.data);
 const { AlouxAWS } = require('aloux-iam')
 
 // uso
-// variables necesarias
+// variables
 /*
 * AWS_REGION
 * AWS_BUCKET
@@ -181,9 +181,9 @@ const { AlouxAWS } = require('aloux-iam')
 /**
  * files = [{key: 'folder/file1'},{key: 'folder/file1'}]
  */
-// Elimina las imagenes seleccionadas
-const files = [{key: 'folder/file1'},{key: 'folder/file1'}]
-const deleteImages = await AlouxAWS.delete(files)
+// delete selected files
+const files = [{key: 'folder/file1.png'},{key: 'folder/file1.png'}]
+const deleteImages = await AlouxAWS.deleteMany(files)
 
 ```
 
@@ -193,7 +193,7 @@ const deleteImages = await AlouxAWS.delete(files)
 const { AlouxAWS } = require('aloux-iam')
 
 // uso
-// variables necesarias
+// variables
 /*
 * AWS_REGION
 * AWS_BUCKET
@@ -202,8 +202,8 @@ const { AlouxAWS } = require('aloux-iam')
 /**
  * file = folder/file_name
  */
-// Elimina la imagen 
-const file = 'folder/file_name' + req.params.MODEL_ID
+// delete the file
+const file = 'folder/file_name.png'
 const deleteImg = await AlouxAWS.delete(file)
 
 ```
@@ -215,7 +215,7 @@ const deleteImg = await AlouxAWS.delete(file)
 const { AlouxAWS } = require('aloux-iam')
 
 // uso
-// variables necesarias
+// variables
 /*
 * AWS_REGION
 * AWS_EMAIL_SENDER
@@ -226,8 +226,48 @@ const { AlouxAWS } = require('aloux-iam')
  * message: Mail body
  * subject: Mail subject
  */
-// se crea una constante para poder guardar el nuevo elemento
+// a constant is created to request the data from the req.body.
 const { email, message, subject } = req.body
 const sendEmail = await AlouxAWS.sendCustom(email, message, subject)
+
+// example of the messages variable
+// this variable must be sent as a string if you want to send modified HTML
+/*
+
+message: "<!DOCTYPE html><html lang='en'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1.0'><title>Document</title></head><body><h1>Information</h1></body></html>"
+
+*/
+
+
+```
+
+### Usage for sms
+#### Send sms
+```js
+// Importación
+const { AlouxAWS } = require('aloux-iam')
+
+// uso
+// variables
+/*
+* AWS_REGION
+*/
+
+/**
+ * phoneNumber: Destination number
+ * message: Message body
+ */
+// a constant is created to request the data from the req.body.
+const { phoneNumber, message } = req.body
+const sendSms = await AlouxAWS.sendMessagePhone(phoneNumber, message)
+
+// example of the phoneNumber variable
+// this variable must be sent as a string and taking into account the telephone prefix
+
+/*
+
+phoneNumber: "+522492104847"
+
+*/
 
 ```
