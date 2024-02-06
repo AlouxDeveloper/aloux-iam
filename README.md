@@ -266,7 +266,7 @@ const sendSms = await AlouxAWS.sendMessagePhone(phoneNumber, message)
 
 /*
 
-phoneNumber: "+522492104847"
+phoneNumber: "+52244-------"
 
 */
 
