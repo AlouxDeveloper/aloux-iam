@@ -61,7 +61,7 @@ Requiere las siguientes variables de entorno (.env)
 
 ## Endpoints disponibles
 
-Endpoints user self (no auth)
+### Endpoints user self (no auth)
 
 | Method    |   Endpoint                |   Description |
 | --------- | --------------------------|---------------|
@@ -75,7 +75,7 @@ Endpoints user self (no auth)
 | POST      |   iam/auth/signup             |   Registrarse |
 
 
-Endpoints user self
+### Endpoints user self
 
 | Method    |   Endpoint                |   Description |
 | --------- | --------------------------|---------------|
@@ -88,7 +88,7 @@ Endpoints user self
 | POST      |	iam/auth/logout             |	Cerrar sesión |
 
 
-Endpoints user
+### Endpoints user
 
 | Method    |   Endpoint                    |   Description |
 | --------- | ------------------------------|----------------|
@@ -102,7 +102,7 @@ Endpoints user
 | GET       |	iam/user/count/all            |	Obtiene el número de usuarios |
 
 
-Endpoints funtions
+### Endpoints funtions
 
 | Method    |   Endpoint                            |   Description |
 | --------- | --------------------------------------|----------------|
@@ -115,7 +115,7 @@ Endpoints funtions
 | GET       |	iam/functions/count/all               |	Obtiene el número de funciones |
 
 
-Endpoints permission
+### Endpoints permission
 
 | Method    |   Endpoint                                |   Description |
 | --------- | ------------------------------------------|---------------|
@@ -128,7 +128,7 @@ Endpoints permission
 | GET       |	iam/permission/count/all                  |	Obtiene el número de permisos |
 
 
-Endpoints menu
+### Endpoints menu
 
 | Method    |   Endpoint                |   Description |
 | --------- | --------------------------|---------------|
@@ -143,8 +143,6 @@ Endpoints menu
 
 
 ## Aloux-AWS
-
-### Usage for files
 #### Aggregate file
 ```js
 // Require
@@ -183,7 +181,7 @@ const { AlouxAWS } = require('aloux-iam')
  */
 // delete selected files
 const files = [{key: 'folder/file1.png'},{key: 'folder/file1.png'}]
-const deleteImages = await AlouxAWS.deleteMany(files)
+const deleteFiles = await AlouxAWS.deleteMany(files)
 
 ```
 
@@ -204,7 +202,7 @@ const { AlouxAWS } = require('aloux-iam')
  */
 // delete the file
 const file = 'folder/file_name.png'
-const deleteImg = await AlouxAWS.delete(file)
+const deleteFile = await AlouxAWS.delete(file)
 
 ```
 
@@ -259,7 +257,7 @@ const { AlouxAWS } = require('aloux-iam')
  */
 // a constant is created to request the data from the req.body.
 const { phoneNumber, message } = req.body
-const sendSms = await AlouxAWS.sendMessagePhone(phoneNumber, message)
+const sendSns = await AlouxAWS.sendMessagePhone(phoneNumber, message)
 
 // example of the phoneNumber variable
 // this variable must be sent as a string and taking into account the telephone prefix
