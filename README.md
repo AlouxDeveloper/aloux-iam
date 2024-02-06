@@ -13,13 +13,13 @@ $ npm install aloux-iam --save
 En archivo `init.js`
 
 ```js
-// Importación
+// Require
 const { IAMRouter, IAMSwagger } = require('aloux-iam')
 
-// uso
+
 app.use(IAMRouter)
 
-// uso swagger
+// swagger
 app.use(
     "/aloux-iam",
     swaggerUI.serveFiles(IAMswagger, {}), 
@@ -35,10 +35,10 @@ app.use(
 En archivo `router.js`
 
 ```js
-// Importación
+// Require
 const { IAMAuth } = require('aloux-iam')
 
-// uso (ejemplo)
+// Example
 router.post('/customer', IAMAuth, customer.create)
 ```
 
@@ -147,10 +147,10 @@ Endpoints menu
 ### Usage for files
 #### Aggregate file
 ```js
-// Importación
+// Require
 const { AlouxAWS } = require('aloux-iam')
 
-// uso
+
 // variables
 /*
 * AWS_REGION
@@ -162,16 +162,16 @@ const { AlouxAWS } = require('aloux-iam')
  * file     = req.files.property
  */
 // a constant is created to save the new element
-const result = await AlouxAWS.upload('folder/file_name', req.files.data);
+const result = await AlouxAWS.upload('folder/file_name', req.files.data)
 
 ```
 
 #### Eliminate many files
 ```js
-// Importación
+// Require
 const { AlouxAWS } = require('aloux-iam')
 
-// uso
+
 // variables
 /*
 * AWS_REGION
@@ -189,10 +189,10 @@ const deleteImages = await AlouxAWS.deleteMany(files)
 
 #### Eliminate file
 ```js
-// Importación
+// Require
 const { AlouxAWS } = require('aloux-iam')
 
-// uso
+
 // variables
 /*
 * AWS_REGION
@@ -211,10 +211,10 @@ const deleteImg = await AlouxAWS.delete(file)
 ### Usage for emails
 #### Send email
 ```js
-// Importación
+// Require
 const { AlouxAWS } = require('aloux-iam')
 
-// uso
+
 // variables
 /*
 * AWS_REGION
@@ -241,13 +241,13 @@ message: "<!DOCTYPE html><html lang='en'><head><meta charset='UTF-8'><meta name=
 
 ```
 
-### Usage for sms
-#### Send sms
+### Usage for sns
+#### Send sns
 ```js
-// Importación
+// Require
 const { AlouxAWS } = require('aloux-iam')
 
-// uso
+
 // variables
 /*
 * AWS_REGION
