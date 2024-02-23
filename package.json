@@ -1,6 +1,6 @@
 {
     "name": "aloux-iam",
-    "version": "0.0.21",
+    "version": "0.0.27",
     "description": "Aloux IAM for APIs ",
     "main": "index.js",
     "scripts": {
