@@ -1,6 +1,7 @@
 const IAMrouter = require('./lib/router')
 const IAMauth = require('./lib/middleware')
 const awsAloux = require('./lib/controllers/operationsAWS')
+const awsBQ = require('./lib/services/bigQuery')
 const YAML = require('yamljs')
 const path = require('path')
 
@@ -30,5 +31,6 @@ module.exports = {
     IAMPermissionModel: Permission,
     IAMMenuModel: Menu,
 
-    AlouxAWS: awsAloux
+    AlouxAWS: awsAloux,
+    AlouxBQ: awsBQ
 }
