@@ -29,6 +29,10 @@ paths:
                     description: email
                     type: string
                     example: developer@aloux.mx
+                  code:
+                    description: code
+                    type: string
+                    example: true
               required:
                 - email
       responses:
