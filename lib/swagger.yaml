@@ -1179,3 +1179,51 @@ paths:
       responses:
         '200':    # status code
           description: Retorna el resultado de la respuesta
+  /iam/history:
+    post:
+      summary: Obtener todo el historial paginado
+      tags:
+        - History
+      description: Ordena los elementos de menú
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          'application/json':
+            schema:
+              properties:
+                filter:
+                  type: object
+                  properties:
+                    method:
+                      enum: [ GET, POST, PUT, PATCH, DELETE]
+                config:
+                  type: object
+                  properties:
+                    page:
+                      type: number
+                      example: 1
+                    itemsPerPage:
+                      type: number
+                      example: 10
+      responses:
+        '200':    # status code
+          description: Retorna el resultado de la respuesta
+  /iam/history/{HISTORY_ID}:
+    get:
+      parameters:
+      - name: HISTORY_ID
+        in: path
+        description: ID de un registro de historial
+        required: true
+        schema:
+          type: string
+          format: ObjectId
+      tags:
+        - History
+      description: Detalle de u registro de historial
+      security:
+        - bearerAuth: []
+      responses:
+        '200':    # status code
+          description: Retorna un objeto
