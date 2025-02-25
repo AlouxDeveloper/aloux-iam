@@ -1,6 +1,7 @@
 const IAMrouter = require("./lib/router");
 const IAMauth = require("./lib/middleware");
 const awsAloux = require("./lib/controllers/operationsAWS");
+const historyAloux = require("./lib/controllers/history");
 const awsBQ = require("./lib/services/bigQuery");
 const YAML = require("yamljs");
 const path = require("path");
@@ -33,4 +34,5 @@ module.exports = {
 
   AlouxAWS: awsAloux,
   AlouxBQ: awsBQ,
+  AlouxHistory: historyAloux,
 };
