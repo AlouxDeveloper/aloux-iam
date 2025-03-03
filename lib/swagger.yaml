@@ -1197,6 +1197,9 @@ paths:
                   properties:
                     method:
                       enum: [ GET, POST, PUT, PATCH, DELETE]
+                    description:
+                      type: string
+                      example: crear
                 config:
                   type: object
                   properties:
