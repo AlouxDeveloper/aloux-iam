@@ -653,6 +653,38 @@ paths:
       responses:
         '200':    # status code
           description: Retorna el resultado de la respuesta
+  /iam/user/pages:
+    post:
+      summary: Listar usuarios (Paginado)
+      tags:
+        - users
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: Configuración de paginación
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                config:
+                  type: object
+                  properties:
+                    page:
+                      type: integer
+                      default: 1
+                    itemsPerPage:
+                      type: integer
+                      default: 10
+                filter:
+                  type: object
+              example:
+                config:
+                  page: 1
+                  itemsPerPage: 10
+      responses:
+        '200':
+          description: ok
   /iam/functions:
     post:
       summary: Crea una función
@@ -801,6 +833,38 @@ paths:
       responses:
         '200':    # status code
           description: Retorna el resultado de la respuesta
+  /iam/functions/pages:
+    post:
+      summary: Listar funciones (Paginado)
+      tags:
+        - functions
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: Configuración de paginación
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                config:
+                  type: object
+                  properties:
+                    page:
+                      type: integer
+                      default: 1
+                    itemsPerPage:
+                      type: integer
+                      default: 10
+                filter:
+                  type: object
+              example:
+                config:
+                  page: 1
+                  itemsPerPage: 10
+      responses:
+        '200':
+          description: ok
   /iam/permission:
     post:
       summary: Crea un permiso
@@ -979,6 +1043,38 @@ paths:
       responses:
         '200':    # status code
           description: Retorna el resultado de la respuesta
+  /iam/permission/pages:
+    post:
+      summary: Listar permisos (Paginado)
+      tags:
+        - permissions
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: Configuración de paginación
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                config:
+                  type: object
+                  properties:
+                    page:
+                      type: integer
+                      default: 1
+                    itemsPerPage:
+                      type: integer
+                      default: 10
+                filter:
+                  type: object
+              example:
+                config:
+                  page: 1
+                  itemsPerPage: 10
+      responses:
+        '200':
+          description: ok
   /iam/menu:
     post:
       summary: Crea un menú
@@ -1179,6 +1275,38 @@ paths:
       responses:
         '200':    # status code
           description: Retorna el resultado de la respuesta
+  /iam/menu/pages:
+    post:
+      summary: Listar menus (Paginado)
+      tags:
+        - menús
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: Configuración de paginación
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                config:
+                  type: object
+                  properties:
+                    page:
+                      type: integer
+                      default: 1
+                    itemsPerPage:
+                      type: integer
+                      default: 10
+                filter:
+                  type: object
+              example:
+                config:
+                  page: 1
+                  itemsPerPage: 10
+      responses:
+        '200':
+          description: ok
   /iam/history:
     post:
       summary: Obtener todo el historial paginado
@@ -1230,3 +1358,35 @@ paths:
       responses:
         '200':    # status code
           description: Retorna un objeto
+  /iam/business/pages:
+    post:
+      summary: Listar negocios (Paginado)
+      tags:
+        - business
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: Configuración de paginación
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                config:
+                  type: object
+                  properties:
+                    page:
+                      type: integer
+                      default: 1
+                    itemsPerPage:
+                      type: integer
+                      default: 10
+                filter:
+                  type: object
+              example:
+                config:
+                  page: 1
+                  itemsPerPage: 10
+      responses:
+        '200':
+          description: ok
