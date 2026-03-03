@@ -6,7 +6,7 @@ info:
   contact:
     name: API Aloux
     url: https://aloux.mx
-    email: developer@aloux.mx
+    email: correo@example
 components:
   securitySchemes:
     bearerAuth:            # arbitrary name for the security scheme
@@ -28,7 +28,7 @@ paths:
                   email: 
                     description: email
                     type: string
-                    example: developer@aloux.mx
+                    example: correo@example
                   code:
                     description: code
                     type: string
@@ -58,11 +58,11 @@ paths:
                   email: 
                     description: email
                     type: string
-                    example: developer@aloux.mx
+                    example: correo@example
                   pwd:
                     description: password
                     type: string
-                    example: Cc123456
+                    example: password
               required:
                 - email
                 - pwd
@@ -89,7 +89,7 @@ paths:
                 email: 
                   description: email 
                   type: string 
-                  example: developer@aloux.mx
+                  example: correo@example
               required: 
                 - email
       responses: 
@@ -137,7 +137,7 @@ paths:
                   email: 
                     description: email
                     type: string
-                    example: developer@aloux.mx
+                    example: correo@example
               required:
                 - email
       responses:
@@ -176,7 +176,7 @@ paths:
                   email: 
                     description: email
                     type: string
-                    example: developer@aloux.mx
+                    example: correo@example
                   pwd:
                     description: password
                     type: string
@@ -231,7 +231,7 @@ paths:
                   email: 
                     description: email
                     type: string
-                    example: developer@aloux.mx
+                    example: correo@example
                   resetCode:
                     description: código de verificación
                     type: number 
@@ -261,11 +261,11 @@ paths:
                   email: 
                     description: email
                     type: string
-                    example: developer@aloux.mx
+                    example: correo@example
                   pwd: 
                     description: contraseña nueva 
                     type: string 
-                    example: "Cc123456"
+                    example: "password"
                   resetCode: 
                     description: código de verificación 
                     type: string 
@@ -322,11 +322,11 @@ paths:
                       email: 
                         description: email
                         type: string
-                        example: developer@aloux.mx
+                        example: correo@example
                       pwd:
                         description: password
                         type: string
-                        example: Cc12345
+                        example: password
                       phone:
                         type: string
                         example: +525567087001
@@ -472,11 +472,11 @@ paths:
                       email: 
                         description: email
                         type: string
-                        example: developer@aloux.mx
+                        example: correo@example
                       pwd:
                         description: password
                         type: string
-                        example: Cc12345
+                        example: password
                       phone:
                         type: string
                         example: +525567087001
@@ -559,11 +559,11 @@ paths:
                       email: 
                         description: email
                         type: string
-                        example: developer@aloux.mx
+                        example: correo@example
                       pwd:
                         description: password
                         type: string
-                        example: Cc12345
+                        example: password
                   required:
                     - email
                     - pwd
@@ -638,7 +638,7 @@ paths:
                   properties:
                       pwd: 
                         type: string
-                        example: Cc12345
+                        example: password
       responses:
         '200':    # status code
           description: Retorna result from response
