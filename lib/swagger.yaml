@@ -1390,3 +1390,211 @@ paths:
       responses:
         '200':
           description: ok
+  #  Generar contraseña
+  /iam/generatePassword:
+    get:
+      summary: Generar contraseña segura
+      tags:
+        - utilities
+      description: >
+        Genera una contraseña aleatoria segura. Garantiza al menos una letra
+        minúscula, una mayúscula, un número y un carácter especial (!@#$%&*).
+        No requiere autenticación.
+      parameters:
+        - name: length
+          in: query
+          required: false
+          description: Longitud de la contraseña (default 12)
+          schema:
+            type: integer
+            default: 12
+            minimum: 4
+      responses:
+        '200':
+          description: Contraseña generada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  password:
+                    type: string
+                    example: "aB3!xKm9Zq#T"
+  # TOTP
+  /iam/totp/setup:
+    get:
+      summary: Generar QR y secreto TOTP
+      tags:
+        - totp
+      description: >
+        Genera un secreto TOTP y retorna un QR en base64 para escanear con una
+        app Authenticator (Google Authenticator, Authy, etc.).
+        Requiere un token temporal de tipo `totp_pending` obtenido tras el login
+        cuando el usuario tiene 2FA habilitado.
+        El secreto se guarda en el usuario hasta que sea activado con `/totp/activate`.
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          description: Bearer {tempToken} — token temporal tipo totp_pending
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Secreto y QR generados correctamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  secret:
+                    type: string
+                    description: Secreto en base32
+                    example: "JBSWY3DPEHPK3PXP"
+                  qrCode:
+                    type: string
+                    description: Imagen QR en formato Data URL (base64)
+                    example: "data:image/png;base64,iVBORw0KGgo..."
+        '401':
+          description: Token temporal expirado o inválido
+        '403':
+          description: El usuario no tiene 2FA habilitado
+        '404':
+          description: Usuario no encontrado
+
+  /iam/totp/activate:
+    post:
+      summary: Activar TOTP tras escanear el QR
+      tags:
+        - totp
+      description: >
+        Valida el código OTP generado por la app Authenticator para confirmar
+        que el QR fue escaneado correctamente. Debe llamarse después de `/totp/setup`.
+        Requiere token temporal tipo `totp_pending`.
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          description: Bearer {tempToken} — token temporal tipo totp_pending
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                token:
+                  description: Código OTP de 6 dígitos generado por la app Authenticator
+                  type: string
+                  example: "123456"
+              required:
+                - token
+      responses:
+        '200':
+          description: TOTP configurado correctamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "TOTP configurado correctamente"
+        '400':
+          description: QR no generado previamente o código inválido
+        '401':
+          description: Token temporal expirado o inválido
+
+  /iam/totp/verify:
+    post:
+      summary: Verificar código TOTP en el login
+      tags:
+        - totp
+      description: >
+        Segundo paso del login cuando el usuario tiene 2FA activo.
+        Valida el código OTP y, si es correcto, emite el token de sesión real
+        y lo setea como cookie `httpOnly`.
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          description: Bearer {tempToken} — token temporal tipo totp_pending
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                token:
+                  description: Código OTP de 6 dígitos generado por la app Authenticator
+                  type: string
+                  example: "123456"
+              required:
+                - token
+      responses:
+        '200':
+          description: Login completado, retorna token de sesión
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    description: JWT de sesión
+                    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                  changePwd:
+                    type: boolean
+                    description: Indica si el usuario debe cambiar su contraseña
+                    example: false
+        '400':
+          description: 2FA no configurado o secreto faltante
+        '401':
+          description: Código inválido o expirado / token temporal inválido
+
+  /iam/user/{USER_ID}/totp:
+    put:
+      summary: Habilitar o deshabilitar 2FA de un usuario (admin)
+      tags:
+        - totp
+      description: >
+        Permite a un administrador habilitar o deshabilitar el 2FA de cualquier usuario.
+        Al deshabilitar, también elimina el secreto TOTP guardado.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: USER_ID
+          in: path
+          required: true
+          description: ID del usuario a modificar
+          schema:
+            type: string
+            format: ObjectId
+            example: "64371ab1b6dc1417c9c0b812"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                enabled:
+                  type: boolean
+                  description: >
+                    `true` para habilitar 2FA, `false` para deshabilitar
+                    (también borra el secreto)
+                  example: true
+              required:
+                - enabled
+      responses:
+        '200':
+          description: Estado de 2FA actualizado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "2FA habilitado"
+        '404':
+          description: Usuario no encontrado
