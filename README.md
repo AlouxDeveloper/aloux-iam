@@ -1,272 +1,311 @@
-# Aloux IAM
+# aloux-iam
 
-Uso de esta librearía para administración de menus, privilegios, funciones, usuarios y envio de notificaciones por medio de correos y mensajes de texto
+Librería Node.js para gestión de identidad y acceso (IAM) en APIs Express + MongoDB.
 
-## Installation
+## Instalación
 
 ```bash
-$ npm install aloux-iam --save
+npm install aloux-iam
 ```
 
-
-## Usage
-En archivo `init.js`
+## Configuración básica
 
 ```js
-// Require
-const { IAMRouter, IAMSwagger } = require('aloux-iam')
+const express     = require('express')
+const mongoose    = require('mongoose')
+const cookieParser = require('cookie-parser')
+const { IAMRouter } = require('aloux-iam')
 
+const app = express()
 
+app.use(express.json())
+app.use(cookieParser())
 app.use(IAMRouter)
 
-// swagger
-app.use(
-    "/aloux-iam",
-    swaggerUI.serveFiles(IAMswagger, {}), 
-    swaggerUI.setup(IAMswagger)
-    )
-
-// URL Swagger
-// [BASE_URL]/docs-iam/#/default/
-
+mongoose.connect(process.env.MONGO_URI)
+app.listen(3000)
 ```
 
-
-En archivo `router.js`
+### Proteger tus propias rutas
 
 ```js
-// Require
 const { IAMAuth } = require('aloux-iam')
 
-// Example
-router.post('/customer', IAMAuth, customer.create)
+app.get('/api/mi-recurso', IAMAuth, (req, res) => {
+  // req.user  → usuario autenticado con funciones y permisos
+  // req.token → JWT string
+  res.json({ user: req.user })
+})
 ```
+
+### Swagger
+
+```js
+const swaggerUI        = require('swagger-ui-express')
+const { IAMSwagger }   = require('aloux-iam')
+
+app.use('/docs-iam', swaggerUI.serveFiles(IAMSwagger, {}), swaggerUI.setup(IAMSwagger))
+```
+
+## Integración con aloux-cloud
+
+```js
+const iam   = require('aloux-iam')
+const cloud = require('aloux-cloud')
+
+iam.init({
+  email:     cloud.ses,
+  sms:       cloud.sns,
+  storage:   cloud.s3,
+  analytics: cloud.bigQuery,
+})
+```
+
+Cada provider es opcional. Si no se configura, el IAM funciona sin ese servicio.
 
 ## Variables de entorno
 
-Requiere las siguientes variables de entorno (.env)
+### Requeridas
 
-| Variable              |   Description |
-| ----------------------|---------------|
-| AUTH_SECRET           |   Required, para cifrar la contraseña |
-| AWS_SECRET_ACCESS_KEY |   Required, para acceso a S3 y SES AWS. |
-| AWS_ACCESS_KEY_ID     |   Required, para acceso a S3 y SES AWS. |
-| AWS_REGION            |   Required, para acceso a S3 y SES AWS. |
-| AWS_BUCKET            |   Required, para guardar la foto de perfil en AWS. |
-| AWS_EMAIL_SENDER      |   Required, para mandar el correo de recuperación de contraseña |
-| DEBUG                 |   Required, para validar si el ambiente es dev o PROD |
-| SWAGGER_SERVER       |   Required, para acceder al swagger de IAM |
-| MASTER_PWD            |   Optional, para utilizar contraseña maestra de usuarios en desarrollo |
-| BASE_URL              |   Optional, para swagger |
+| Variable | Descripción |
+|----------|-------------|
+| `AUTH_SECRET` | Clave secreta para firmar JWT |
+| `MONGO_URI` | URI de conexión a MongoDB |
 
+### Sesión y autenticación
 
-## Endpoints disponibles
+| Variable | Default | Descripción |
+|----------|---------|-------------|
+| `SESSION_TIME` | — | Duración del token en minutos |
+| `MAX_TOKENS` | `5` | Sesiones activas simultáneas por usuario |
+| `FAILED_ATTEMPS` | `5` | Intentos fallidos antes de bloquear la cuenta |
+| `SESSION_INTERRUPTOR` | — | Si `true`, valida expiración en cada request |
+| `SERVICE_ACCOUNT_TTL_DAYS` | permanente | Días de vida del token de cuentas de servicio |
+| `DEBUG` | — | Si `true`, activa `MASTER_PWD` y URL de Swagger |
+| `MASTER_PWD` | — | Contraseña maestra que omite bcrypt (requiere `DEBUG=true`) |
+| `SWAGGER_SERVER` | — | URL del servidor en Swagger cuando `DEBUG=true` |
 
-### Endpoints user self (no auth)
+### Emails (requiere provider `email`)
 
-| Method    |   Endpoint                |   Description |
-| --------- | --------------------------|---------------|
-| POST      |   iam/auth/email              |   Validar correo |
-| POST      |   iam/auth/login              |   Iniciar sesión |
-| POST      |   iam/auth/forgot/password    |	Enviar código a correo |
-| POST      |   iam/auth/validate/code      |   Verificar código |
-| POST      |   iam/auth/verify/mail        |   Verificar correo |
-| GET       |   iam/auth/verify/mail/token/:token  | Valida correo (Manda correo de bienvenida) |
-| POST      |   iam/auth/reset/password     |   Reestablecer contraseña |
-| POST      |   iam/auth/signup             |   Registrarse |
+| Variable | Descripción |
+|----------|-------------|
+| `SEND_EMAIL_USER` | Si `true`, envía credenciales al crear usuario admin |
+| `SUBJECT_EMAIL` | Asunto por defecto de los emails |
+| `CHANGE_PWD` | Si `true`, fuerza cambio de contraseña en primer login |
+| `VERIFY_ACCOUNT_URL` | URL base para verificación de cuenta |
+| `URL_VERIFY_EMAIL` | URL para confirmar cambio de email |
+| `TEMPLATE_ACCOUNT` | Path al template HTML de credenciales |
+| `TEMPLATE_RECOVER_PASSWORD` | Path al template HTML de recuperación |
+| `TEMPLATE_VERIFY_EMAIL` | Path al template HTML de verificación |
+| `TEMPLATE_WELCOME` | Path al template HTML de bienvenida |
+| `TEMPLATE_CHANGE_MAIL` | Path al template HTML de cambio de email |
 
+### Branding y multi-app
 
-### Endpoints user self
+| Variable | Descripción |
+|----------|-------------|
+| `APP` | Identificador de app para templates con sufijo |
+| `PROJECT_NAME` | Nombre de la app en templates y SMS |
+| `PROJECT_URL` | URL del proyecto en SMS de verificación |
+| `BRAND_COLOR` | Color principal para templates de email |
+| `BRAND_LOGO` | URL del logo para templates de email |
+| `FUNCTION_NAME` | Función asignada por defecto al hacer signup |
 
-| Method    |   Endpoint                |   Description |
-| --------- | --------------------------|---------------|
-| GET       |	iam/auth/me                 |	Obtener información de usuario autenticado |
-| PUT       |	iam/auth/profile            |	Actualizar perfil |
-| PUT       |	iam/auth/profile/pictura    |	Actualizar solo la foto de perfil |
-| PUT       |	iam/auth/reset/password     |	Actualizar contraseña |
-| POST      |   iam/auth/send/verify/phone  |   Enviar código al teléfono de la cuenta para verificarla |
-| POST      |   iam/auth/verify/phone       | Valida teléfono del usuario de la cuenta |
-| POST      |	iam/auth/logout             |	Cerrar sesión |
+### Historial
 
+| Variable | Descripción |
+|----------|-------------|
+| `HISTORY` | Si `true`, registra historial de acciones |
+| `HISTORY_ENDPOINTS` | Paths separados por coma a registrar |
 
-### Endpoints user
+### Analytics (requiere provider `analytics`)
 
-| Method    |   Endpoint                    |   Description |
-| --------- | ------------------------------|----------------|
-| POST      |   iam/user                    |	Crear usuario |
-| GET       |	iam/user                    |	Obtener todos los usuario |
-| GET       |	iam/user/:USER_ID           |	Obtener detalle de usuario |
-| PUT       |	iam/user/:USER_ID           |	Actualizar usuario |
-| PUT       |	iam/user/:USER_ID/status    |	Activar o desactivar usuario |
-| PUT       |	iam/user/password/:USER_ID  |	Actualizar la constraseña de un usuario |
-| DELETE    |	iam/user/:USER_ID           |	Eliminar usuario |
-| GET       |	iam/user/count/all            |	Obtiene el número de usuarios |
+| Variable | Descripción |
+|----------|-------------|
+| `UPLOAD_CUSTOMER` | Si `true`, inserta nuevos usuarios en BigQuery |
+| `UPLOAD_CUSTOMER_TABLE` | Tabla de BigQuery donde insertar |
 
+## Exportaciones
 
-### Endpoints funtions
+| Export | Tipo | Descripción |
+|--------|------|-------------|
+| `IAMRouter` | Express Router | Monta todos los endpoints `/iam/*` |
+| `IAMAuth` | Middleware | Autenticación JWT para tus rutas |
+| `IAMSwagger` | Object | Spec OpenAPI lista para swagger-ui-express |
+| `IAMUserModel` | Mongoose Model | Modelo User |
+| `IAMUserBusiness` | Mongoose Model | Modelo Business |
+| `IAMFunctionsModel` | Mongoose Model | Modelo Functions |
+| `IAMPermissionModel` | Mongoose Model | Modelo Permission |
+| `IAMMenuModel` | Mongoose Model | Modelo Menu |
+| `AlouxHistory` | Service | Controlador de historial |
+| `init` | Function | Registra providers de aloux-cloud |
 
-| Method    |   Endpoint                            |   Description |
-| --------- | --------------------------------------|----------------|
-| POST      |   iam/functions                       |   Crear función |
-| PUT       |	iam/functions/:FUNCTION_ID          |	Actualizar función |
-| PUT       |	iam/functions/:FUNCTION_ID/status   |	Activar o desactivar función |
-| GET       |	iam/functions                       |	Obtener todas las funciones |
-| GET       |	iam/functions/:FUNCTION_ID          |	Obtener detalle de la función |
-| DELETE    |	iam/functions/:FUNCTION_ID          |	Eliminar función |
-| GET       |	iam/functions/count/all               |	Obtiene el número de funciones |
+## Flujos de creación de usuarios
 
+### Signup público — `POST /iam/auth/signup`
+El usuario se registra solo. Requiere `email` y `pwd`. Se le asigna la función definida en `FUNCTION_NAME`.
 
-### Endpoints permission
+### Usuario administrado — `POST /iam/user`
+Un admin crea el usuario. Requiere `email` y `pwd`. Permite asignar funciones, empresas y negocios.
 
-| Method    |   Endpoint                                |   Description |
-| --------- | ------------------------------------------|---------------|
-| POST      |	iam/permission                          |   Crear permiso
-| PUT       |	iam/permission/:PERMISSION_ID           |	Actualizar permiso |
-| PUT       |	iam/permission/:PERMISSION_ID/status    |	Activar o desactivar permiso |
-| GET       |	iam/permission                          |   Obtener todas los permisos |
-| GET       |	iam/permission/:PERMISSION_ID           |	Obtener detalle de la permiso |
-| DELETE    |	iam/permission/:PERMISSION_ID           |	Eliminar permiso |
-| GET       |	iam/permission/count/all                  |	Obtiene el número de permisos |
+### Cuenta de servicio — `POST /iam/user/service`
+Sin `email` ni contraseña. Para comunicación machine-to-machine. Devuelve un API token permanente una sola vez en la respuesta.
 
+## Endpoints
 
-### Endpoints menu
+### Autenticación (sin token)
 
-| Method    |   Endpoint                |   Description |
-| --------- | --------------------------|---------------|
-| POST      |   /iam/menu               |   Crea un elemento de menú |
-| PUT       |   /iam/menu/:MENU_ID           |   Actualiza un elemento de menú |
-| PUT       |   /iam/menu/:MENU_ID/status    |   Activa o desactiva un menú |
-| GET       |   /iam/menu               |   Obtiene todos los elementos de menú |
-| GET       |   /iam/menu/:MENU_ID           |   Obtiene el detalle de un elemento de menú |
-| DELETE    |   /iam/menu/:MENU_ID           |   Elimina un elemento de menú |
-| POST      |   /iam/menu/order         |   Ordena los elementos de menú |
-| GET       |	iam/menu/count        |	Obtiene el número de menús |
+| Método | Endpoint | Descripción |
+|--------|----------|-------------|
+| `POST` | `/iam/auth/email` | Verificar si un email existe |
+| `POST` | `/iam/auth/login` | Iniciar sesión |
+| `POST` | `/iam/auth/logo` | Logo de empresa por email |
+| `POST` | `/iam/auth/forgot/password` | Enviar código de recuperación |
+| `POST` | `/iam/auth/validate/code` | Validar código de recuperación |
+| `POST` | `/iam/auth/reset/password` | Resetear contraseña con código |
+| `POST` | `/iam/auth/verify/mail` | Enviar email de verificación de cuenta |
+| `GET`  | `/iam/auth/verify/mail/token/:token` | Activar cuenta por token |
+| `POST` | `/iam/auth/signup` | Registro público (requiere `pwd`) |
+| `GET`  | `/iam/generatePassword` | Generar contraseña segura aleatoria |
 
+### Autenticación (con token)
 
-## Aloux-AWS
-#### Aggregate file
-```js
-// Require
-const { AlouxAWS } = require('aloux-iam')
+| Método | Endpoint | Descripción |
+|--------|----------|-------------|
+| `GET`   | `/iam/auth/me` | Perfil del usuario autenticado |
+| `PATCH` | `/iam/auth/profile` | Actualizar perfil |
+| `PUT`   | `/iam/auth/profile/pictura` | Actualizar foto de perfil |
+| `PUT`   | `/iam/auth/reset/password` | Cambiar contraseña |
+| `POST`  | `/iam/auth/send/verify/phone` | Enviar código SMS |
+| `POST`  | `/iam/auth/verify/phone` | Validar código de teléfono |
+| `POST`  | `/iam/auth/logout` | Cerrar sesión |
+| `PATCH` | `/iam/auth/mail` | Iniciar cambio de email |
+| `POST`  | `/iam/auth/validate/mail` | Confirmar nuevo email |
 
+### 2FA / TOTP
 
-// variables
-/*
-* AWS_REGION
-* AWS_BUCKET
-*/
+| Método | Endpoint | Descripción |
+|--------|----------|-------------|
+| `GET`  | `/iam/totp/setup` | Genera QR y secreto TOTP |
+| `POST` | `/iam/totp/activate` | Activa 2FA tras escanear QR |
+| `POST` | `/iam/totp/verify` | Verifica código TOTP en el login |
 
-/**
- * pathFile = folder/file_name-file_id
- * file     = req.files.property
- */
-// a constant is created to save the new element
-const result = await AlouxAWS.upload('folder/file_name', req.files.data)
+### Usuarios
 
+| Método | Endpoint | Descripción |
+|--------|----------|-------------|
+| `POST`   | `/iam/user` | Crear usuario administrado |
+| `POST`   | `/iam/user/service` | Crear cuenta de servicio |
+| `GET`    | `/iam/user` | Listar usuarios `?page&itemsPerPage&search` |
+| `GET`    | `/iam/user/:USER_ID` | Obtener usuario |
+| `PATCH`  | `/iam/user/:USER_ID` | Actualizar usuario |
+| `PUT`    | `/iam/user/:USER_ID/status` | Cambiar estado |
+| `PUT`    | `/iam/user/password/:USER_ID` | Cambiar contraseña |
+| `DELETE` | `/iam/user/:USER_ID` | Eliminar usuario |
+| `GET`    | `/iam/user/count/all` | Contar usuarios |
+| `GET`    | `/iam/business/user` | Usuarios del negocio actual |
+| `GET`    | `/iam/user/by/my/companies` | Usuarios de mis empresas |
+
+### Funciones
+
+| Método | Endpoint | Descripción |
+|--------|----------|-------------|
+| `POST`   | `/iam/functions` | Crear función |
+| `GET`    | `/iam/functions` | Listar funciones |
+| `GET`    | `/iam/functions/:FUNCTION_ID` | Obtener función |
+| `PATCH`  | `/iam/functions/:FUNCTION_ID` | Actualizar función |
+| `PUT`    | `/iam/functions/:FUNCTION_ID/status` | Cambiar estado |
+| `DELETE` | `/iam/functions/:FUNCTION_ID` | Eliminar función |
+| `GET`    | `/iam/functions/count/all` | Contar funciones |
+
+### Permisos
+
+| Método | Endpoint | Descripción |
+|--------|----------|-------------|
+| `POST`   | `/iam/permission` | Crear permiso |
+| `GET`    | `/iam/permission` | Listar permisos |
+| `GET`    | `/iam/permission/:PERMISSION_ID` | Obtener permiso |
+| `PATCH`  | `/iam/permission/:PERMISSION_ID` | Actualizar permiso |
+| `PUT`    | `/iam/permission/:PERMISSION_ID/status` | Cambiar estado |
+| `DELETE` | `/iam/permission/:PERMISSION_ID` | Eliminar permiso |
+| `GET`    | `/iam/permission/count/all` | Contar permisos |
+
+### Menús
+
+| Método | Endpoint | Descripción |
+|--------|----------|-------------|
+| `POST`   | `/iam/menu` | Crear elemento |
+| `GET`    | `/iam/menu` | Listar menús |
+| `GET`    | `/iam/menu/:MENU_ID` | Obtener elemento |
+| `PATCH`  | `/iam/menu/:MENU_ID` | Actualizar elemento |
+| `PUT`    | `/iam/menu/:MENU_ID/status` | Cambiar estado |
+| `POST`   | `/iam/menu/order` | Reordenar |
+| `DELETE` | `/iam/menu/:MENU_ID` | Eliminar elemento |
+| `GET`    | `/iam/menu/count/all` | Contar menús |
+
+### Empresas
+
+| Método | Endpoint | Descripción |
+|--------|----------|-------------|
+| `POST`   | `/iam/company` | Crear empresa |
+| `GET`    | `/iam/company` | Listar empresas |
+| `GET`    | `/iam/company/my` | Mis empresas |
+| `GET`    | `/iam/company/:COMPANY_ID` | Detalle |
+| `PATCH`  | `/iam/company/:COMPANY_ID` | Actualizar |
+| `PATCH`  | `/iam/company/:COMPANY_ID/picture` | Actualizar logo |
+| `PATCH`  | `/iam/company/:COMPANY_ID/favicon` | Actualizar favicon |
+| `GET`    | `/iam/company/:ID/identity` | Identidad pública |
+| `PUT`    | `/iam/company/:COMPANY_ID/gkey` | Configurar Google Key |
+| `DELETE` | `/iam/company/:COMPANY_ID/gkey` | Eliminar Google Key |
+| `DELETE` | `/iam/company/:COMPANY_ID` | Eliminar empresa |
+
+### Negocios
+
+| Método | Endpoint | Descripción |
+|--------|----------|-------------|
+| `POST`   | `/iam/business` | Crear negocio |
+| `GET`    | `/iam/business` | Listar negocios |
+| `POST`   | `/iam/business/company` | Negocios de una empresa |
+| `GET`    | `/iam/business/my` | Mis negocios |
+| `GET`    | `/iam/business/my/company/:COMPANY_ID` | Mis negocios por empresa |
+| `GET`    | `/iam/business/:BUSINESS_ID` | Detalle |
+| `PUT`    | `/iam/business/:BUSINESS_ID` | Actualizar |
+| `PATCH`  | `/iam/business/:BUSINESS_ID/picture` | Actualizar logo |
+| `PATCH`  | `/iam/business/:BUSINESS_ID/favicon` | Actualizar favicon |
+| `GET`    | `/iam/business/:ID/identity` | Identidad pública |
+| `PATCH`  | `/iam/business/:BUSINESS_ID/useCompanyKey` | Usar clave de empresa |
+| `POST`   | `/iam/business/:BUSINESS_ID/inheritKey` | Heredar clave de empresa |
+| `DELETE` | `/iam/business/:BUSINESS_ID` | Eliminar negocio |
+
+### Logs, Etiquetas e Historial
+
+| Método | Endpoint | Descripción |
+|--------|----------|-------------|
+| `POST`   | `/iam/log` | Crear log |
+| `POST`   | `/iam/log/retrieve` | Recuperar logs con filtros y analytics |
+| `GET`    | `/iam/log/:LOG_ID` | Obtener log |
+| `PATCH`  | `/iam/log/:LOG_ID` | Actualizar log |
+| `PUT`    | `/iam/log/:LOG_ID/status` | Cambiar estado |
+| `DELETE` | `/iam/log/:LOG_ID` | Eliminar log |
+| `GET`    | `/iam/log/count/all` | Contar logs |
+| `POST`   | `/iam/label` | Crear etiqueta |
+| `GET`    | `/iam/label` | Listar etiquetas |
+| `POST`   | `/iam/retrieve/history` | Listar historial |
+| `GET`    | `/iam/history/:HISTORY_ID` | Detalle de historial |
+
+## Respuesta de error estándar
+
+Todos los errores del IAM devuelven siempre la misma estructura:
+
+```json
+{
+  "code":       400,
+  "title":      "Título del error",
+  "detail":     "Descripción detallada",
+  "suggestion": "Qué hacer para resolverlo"
+}
 ```
 
-#### Eliminate many files
-```js
-// Require
-const { AlouxAWS } = require('aloux-iam')
+## Licencia
 
-
-// variables
-/*
-* AWS_REGION
-* AWS_BUCKET
-*/
-
-/**
- * files = [{key: 'folder/file1'},{key: 'folder/file1'}]
- */
-// delete selected files
-const files = [{key: 'folder/file1.png'},{key: 'folder/file1.png'}]
-const deleteFiles = await AlouxAWS.deleteMany(files)
-
-```
-
-#### Eliminate file
-```js
-// Require
-const { AlouxAWS } = require('aloux-iam')
-
-
-// variables
-/*
-* AWS_REGION
-* AWS_BUCKET
-*/
-
-/**
- * file = folder/file_name
- */
-// delete the file
-const file = 'folder/file_name.png'
-const deleteFile = await AlouxAWS.delete(file)
-
-```
-
-### Usage for emails
-#### Send email
-```js
-// Require
-const { AlouxAWS } = require('aloux-iam')
-
-
-// variables
-/*
-* AWS_REGION
-* AWS_EMAIL_SENDER
-*/
-
-/**
- * email: Destination email
- * message: Mail body
- * subject: Mail subject
- */
-// a constant is created to request the data from the req.body.
-const { email, message, subject } = req.body
-const sendEmail = await AlouxAWS.sendCustom(email, message, subject)
-
-// example of the messages variable
-// this variable must be sent as a string if you want to send modified HTML
-/*
-
-message: "<!DOCTYPE html><html lang='en'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1.0'><title>Document</title></head><body><h1>Information</h1></body></html>"
-
-*/
-
-
-```
-
-### Usage for sns
-#### Send sns
-```js
-// Require
-const { AlouxAWS } = require('aloux-iam')
-
-
-// variables
-/*
-* AWS_REGION
-*/
-
-/**
- * phoneNumber: Destination number
- * message: Message body
- */
-// a constant is created to request the data from the req.body.
-const { phoneNumber, message } = req.body
-const sendSns = await AlouxAWS.sendMessagePhone(phoneNumber, message)
-
-// example of the phoneNumber variable
-// this variable must be sent as a string and taking into account the telephone prefix
-
-/*
-
-phoneNumber: "+52244-------"
-
-*/
-
-```
+MIT

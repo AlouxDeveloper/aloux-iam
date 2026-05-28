@@ -1,10 +1,16 @@
+const REQUIRED_ENV = ['AUTH_SECRET', 'SESSION_TIME'];
+const missingEnv = REQUIRED_ENV.filter(k => !process.env[k]);
+if (missingEnv.length > 0) {
+  throw new Error(`[aloux-iam] Variables de entorno requeridas faltantes: ${missingEnv.join(', ')}`);
+}
+
 const IAMrouter = require("./lib/router");
 const IAMauth = require("./lib/middleware");
-const awsAloux = require("./lib/controllers/operationsAWS");
 const historyAloux = require("./lib/controllers/history");
-const awsBQ = require("./lib/services/bigQuery");
-const YAML = require("yamljs");
+const providers = require("./lib/providers");
+const jsyaml = require("js-yaml");
 const path = require("path");
+const fs = require("fs");
 
 const User = require("./lib/models/User");
 const Functions = require("./lib/models/Functions");
@@ -14,7 +20,7 @@ const Business = require("./lib/models/Business");
 
 // swagger
 const swagger_path = path.resolve(__dirname, "./lib/swagger.yaml");
-const swagger = YAML.load(swagger_path);
+const swagger = jsyaml.load(fs.readFileSync(swagger_path, "utf8"));
 
 if (process.env.DEBUG === "true") {
   swagger["servers"] = [];
@@ -32,7 +38,7 @@ module.exports = {
   IAMPermissionModel: Permission,
   IAMMenuModel: Menu,
 
-  AlouxAWS: awsAloux,
-  AlouxBQ: awsBQ,
   AlouxHistory: historyAloux,
+
+  init: (p = {}) => providers.set(p),
 };

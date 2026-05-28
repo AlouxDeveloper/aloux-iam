@@ -1,1 +1,7 @@
 node_modules
+.env
+.env.prod
+.scannerwork
+ecosystem.config.js
+firebase.json
+.prettierignore

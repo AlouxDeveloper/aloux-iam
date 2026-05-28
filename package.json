@@ -1,6 +1,6 @@
 {
   "name": "aloux-iam",
-  "version": "0.0.145",
+  "version": "1.0.0",
   "description": "Aloux IAM for APIs ",
   "main": "index.js",
   "scripts": {
@@ -19,22 +19,18 @@
   "license": "MIT",
   "homepage": "https://github.com/alouxDeveloper/aloux-sdk#readme",
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.293.0",
-    "@aws-sdk/client-ses": "^3.293.0",
-    "@aws-sdk/client-sns": "^3.293.0",
-    "@google-cloud/bigquery": "^5.12.0",
-    "@google-cloud/bigquery-storage": "^4.2.1",
-    "@google-cloud/storage": "^5.7.0",
-    "bcryptjs": "^2.4.3",
+    "bcryptjs": "^3.0.3",
     "cookie-parser": "^1.4.6",
-    "dayjs": "^1.11.9",
-    "express": "^4.19.2",
-    "jsonwebtoken": "^9.0.0",
+    "dayjs": "^1.11.21",
+    "express": "^5.2.1",
+    "express-fileupload": "^1.5.2",
+    "helmet": "^8.2.0",
+    "js-yaml": "^4.1.1",
+    "jsonwebtoken": "^9.0.3",
     "method-override": "^3.0.0",
-    "mongodb": "^4.17.x",
-    "mongoose": "^6.12.x",
-    "qrcode": "^1.5.4",
-    "speakeasy": "^2.0.0",
-    "yamljs": "^0.3.0"
+    "mongodb": "^7.2.0",
+    "mongoose": "^9.6.2",
+    "otplib": "^12.0.1",
+    "qrcode": "^1.5.4"
   }
 }
