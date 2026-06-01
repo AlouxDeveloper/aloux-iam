@@ -1,6 +1,6 @@
 {
   "name": "aloux-iam",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Aloux IAM for APIs ",
   "main": "index.js",
   "scripts": {
@@ -17,7 +17,7 @@
   ],
   "author": "Aloux",
   "license": "MIT",
-  "homepage": "https://github.com/alouxDeveloper/aloux-sdk#readme",
+  "homepage": "https://docs.aloux.mx/iam",
   "dependencies": {
     "bcryptjs": "^3.0.3",
     "cookie-parser": "^1.4.6",
