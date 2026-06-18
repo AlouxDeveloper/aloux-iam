@@ -5,3 +5,4 @@ node_modules
 ecosystem.config.js
 firebase.json
 .prettierignore
+package-lock.json
