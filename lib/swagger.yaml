@@ -504,6 +504,10 @@ paths:
                       description: true si es la sesión desde la que se hace la petición
                       type: boolean
                       example: true
+                    userAgent:
+                      description: User-agent del navegador/dispositivo que inició la sesión
+                      type: string
+                      example: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)..."
   /iam/auth/sessions/{id}:
     delete:
       summary: Cerrar una sesión específica
