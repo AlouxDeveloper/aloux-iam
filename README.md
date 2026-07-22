@@ -178,7 +178,10 @@ Sin `email` ni contraseña. Para comunicación machine-to-machine. Devuelve un A
 | `PUT`   | `/iam/auth/reset/password` | Cambiar contraseña |
 | `POST`  | `/iam/auth/send/verify/phone` | Enviar código SMS |
 | `POST`  | `/iam/auth/verify/phone` | Validar código de teléfono |
-| `POST`  | `/iam/auth/logout` | Cerrar sesión |
+| `POST`  | `/iam/auth/logout` | Cerrar sesión (la actual) |
+| `POST`  | `/iam/auth/logout-all` | Cerrar todas las sesiones |
+| `GET`   | `/iam/auth/sessions` | Listar sesiones activas |
+| `DELETE`| `/iam/auth/sessions/:id` | Cerrar una sesión específica |
 | `PATCH` | `/iam/auth/mail` | Iniciar cambio de email |
 | `POST`  | `/iam/auth/validate/mail` | Confirmar nuevo email |
 
