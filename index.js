@@ -17,6 +17,7 @@ const Functions = require("./lib/models/Functions");
 const Permission = require("./lib/models/Permission");
 const Menu = require("./lib/models/Menu");
 const Business = require("./lib/models/Business");
+const Company = require("./lib/models/Company");
 
 // swagger
 const swagger_path = path.resolve(__dirname, "./lib/swagger.yaml");
@@ -37,6 +38,7 @@ module.exports = {
   IAMFunctionsModel: Functions,
   IAMPermissionModel: Permission,
   IAMMenuModel: Menu,
+  IAMMenuCompany: Company,
 
   AlouxHistory: historyAloux,
 
