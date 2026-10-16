@@ -467,6 +467,24 @@ paths:
                 type: object
                 items:
                   type: string
+  /iam/auth/account:
+    delete:
+      summary: Eliminar mi cuenta
+      tags:
+        - users - self
+      description: Elimina la cuenta del usuario en sesión. El documento se conserva anonimizado (nombre, correo, teléfono, foto y datos se borran; estado "Eliminado") para no romper referencias, y se cierran todas las sesiones. Cada API puede validar o limpiar lo suyo con el provider accountDeletion de init()
+      security:
+        - bearerAuth: []
+      responses:
+        '200':    # status code
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  deleted:
+                    type: boolean
   /iam/auth/sessions:
     get:
       summary: Listar sesiones activas
